@@ -16,9 +16,13 @@
     </Design.DataContext>
 
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-        <TextBlock Text="{Binding Greeting}"/>
+        <!-- <TextBlock Text="{Binding Greeting}"/>
         <TextBlock Text="hello" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Button Content="hahahah" Click="{Binding Test}"/>
+        <Button Content="hahahah" Click="{Binding Test}"/> -->
+
+        <Grid x:Name="DynamicGrid">
+                    
+        </Grid>
     </StackPanel>
 
 </Window>
