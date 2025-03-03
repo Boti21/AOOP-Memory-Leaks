@@ -124,4 +124,23 @@ public class Img
             }
         }
     }
+    
+    public void SerializeToFile(string path)
+    {
+        List<byte> serializedImgMatrix = new List<byte>();
+        serializedImgMatrix.Add(this.RowDimension);
+        serializedImgMatrix.Add(this.ColumnDimension);
+        for (int i = 0; i < this.RowDimension; i++)
+        {
+            for (int j = 0; j < this.ColumnDimension; j++)
+            {
+                serializedImgMatrix.Add(this.ImgMatrix[i][j]);
+            }
+        }
+
+        for (int i = 0; i < serializedImgMatrix.Count; i++)
+        {
+            Console.Write(serializedImgMatrix[i]);
+        }
+    }
 }
