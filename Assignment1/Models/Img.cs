@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 
 namespace Assignment1.Models;
-
 public class Img
 {
     // Public variables that are set at initialization
@@ -124,9 +123,12 @@ public class Img
             }
         }
     }
-    
+
+    // Serializes class and writes it to file
     public void SerializeToFile(string path)
     {
+        if (path == null) throw new ArgumentNullException(nameof(path));
+        
         List<byte> serializedImgMatrix = new List<byte>();
         serializedImgMatrix.Add(this.RowDimension);
         serializedImgMatrix.Add(this.ColumnDimension);
@@ -138,9 +140,18 @@ public class Img
             }
         }
 
+        string result = new String("");
         for (int i = 0; i < serializedImgMatrix.Count; i++)
         {
-            Console.Write(serializedImgMatrix[i]);
+            result += serializedImgMatrix[i].ToString();
         }
+        
+        // Deleting if it exists
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+        }
+        // Creating if it doesn't and appending contents
+        File.AppendAllText(path, result);
     }
 }
