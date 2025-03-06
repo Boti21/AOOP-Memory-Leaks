@@ -1,23 +1,32 @@
 using System;
+
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Layout;
 using Avalonia.Media.Imaging;
 using Avalonia.Media;
 using Avalonia.Platform;
+using Avalonia.Styling;
+using Avalonia.Data;
+using System.IO.Enumeration;
+using Assignment1.Models;
+using System.Data;
+using System.IO;
+using System.Linq;
 
 namespace Assignment1.Views;
 
 public partial class MainWindow : Window
 {
     int NoRows = 6;
-    int NoColumns = 5;
-    int[,] data = { {0, 0, 0, 0, 0},
-                    {0, 13, 0, 13, 0},
-                    {0, 0, 0, 0, 0},
-                    {1, 0, 0, 0, 1},
-                    {0, 1, 1, 1, 0},
-                    {0, 0, 0, 0, 0}};
+    int NoColumns = 7;
+    int[,] data = { {0, 1, 0, 0, 0, 1, 0},
+                    {0, 0, 0 ,0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0},
+                    {1, 0, 0, 0, 0, 0, 1},
+                    {0, 1, 1, 1, 1, 1, 0}};
 
     public MainWindow()
     {
@@ -25,7 +34,13 @@ public partial class MainWindow : Window
         this.Width = 600; 
         this.Height = 500;
 
+        this.Background = Brushes.White;
+
+        DisplaySizeInfo();
+
         GenerateGrid();
+
+        MakeButtons();
     }
 
     private IBrush GetColorFromValue(int value)
@@ -51,6 +66,14 @@ public partial class MainWindow : Window
         };
     }
 
+    private void DisplaySizeInfo() // Display the current grid size for the image
+    {
+        SizeTextBlock.Text = $"Size: {NoRows}x{NoColumns}";
+        SizeTextBlock.Foreground = Brushes.Black;
+        SizeTextBlock.FontFamily = "Comic Sans"; // Because Yes.
+        SizeTextBlock.FontSize = 24;
+    }
+
     private void GenerateGrid() {
         DynamicGrid.RowDefinitions.Clear();
         DynamicGrid.ColumnDefinitions.Clear();
@@ -71,9 +94,9 @@ public partial class MainWindow : Window
                 // This has to be some interpreted sorcery
 
                 var button = new Button {
-                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch,
-                    VerticalAlignment = Avalonia.Layout.VerticalAlignment.Stretch,
-                    BorderThickness = new Thickness(0.3),
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    BorderThickness = new Thickness(0.1),
                     BorderBrush = Brushes.Black,
                     CornerRadius = new CornerRadius(0),
                     Width = 40,
@@ -96,6 +119,77 @@ public partial class MainWindow : Window
                 DynamicGrid.Children.Add(button);
             }
         }
+    }
 
+    private void MakeButtons() // Create and adjust the Save Load buttons as desired
+    {
+        var saveButton = new Button
+        {
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Stretch,
+            BorderThickness = new Thickness(0.1),
+            BorderBrush = Brushes.Black,
+            CornerRadius = new CornerRadius(0),
+            Width = 100,
+            Height = 30,
+            Background = Brushes.Gray,
+            Content = "Save",
+            HorizontalContentAlignment = HorizontalAlignment.Center
+        };
+
+        var loadButton = new Button
+        {
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Stretch,
+            BorderThickness = new Thickness(0.1),
+            BorderBrush = Brushes.Black,
+            CornerRadius = new CornerRadius(0),
+            Width = 100,
+            Height = 30,
+            Background = Brushes.Gray,
+            Content = "Load",
+            HorizontalContentAlignment = HorizontalAlignment.Center
+        };
+
+        Grid.SetColumn(saveButton, 0);
+        Grid.SetColumn(loadButton, 1);
+
+        saveButton.Click += (sender, e) => // Add the save functionality when pressing the save button
+        {
+            var filePath = ImageFileTextBox.Text;
+            //SerializeToFile(filePath); // Ask Boti
+        };
+
+        loadButton.Click += (sender, e) => // Add the load functionality when pressing the load button
+        {
+            var filePathElements = ImageFileTextBox.Text.Split('/');
+            var filePath = filePathElements.Last();
+
+            ReadFile(filePath, out NoRows, out NoColumns, out data);
+        };
+
+        SaveLoadButtons.Children.Add(saveButton);
+        SaveLoadButtons.Children.Add(loadButton);
+    }
+
+    static void ReadFile(string filePath, out int rows, out int columns, out int[,] pixelValues)
+    {
+        string[] lines = File.ReadAllLines(filePath);
+
+        string[] dims = lines[0].Split(' '); // Split rows and columns number by empty space for now
+        rows = Convert.ToInt32(dims[0]);
+        columns = Convert.ToInt32(dims[1]);
+
+        pixelValues = new int[rows, columns]; // Create array based on number of rows and columns to split pixel values correctly
+
+        int index = 0;
+        for (int r = 0; r < rows; r++)
+        {
+            for (int c = 0; c < columns; c++)
+            {
+                pixelValues[r, c] = Convert.ToInt32(lines[1][index]);
+                index++;
+            }
+        }
     }
 }

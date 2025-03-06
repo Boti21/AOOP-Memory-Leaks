@@ -15,13 +15,26 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+    <StackPanel x:Name="ParentStackPanel" HorizontalAlignment="Center" VerticalAlignment="Center">
         <!-- <TextBlock Text="{Binding Greeting}"/>
         <TextBlock Text="hello" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Button Content="hahahah" Click="{Binding Test}"/> -->
 
-        <Grid x:Name="DynamicGrid">
-                    
+        <TextBlock x:Name="SizeTextBlock" HorizontalAlignment="Center" />
+        <Border BorderBrush="Black" BorderThickness="1" Padding="2" Margin="0, 25, 0 ,0">
+            <Border BorderBrush="Black" BorderThickness="1" Padding="10">
+                <Grid x:Name="DynamicGrid">
+                    <Grid.Styles>
+                        <Style Selector="Button:pointerover">
+                            <Setter Property="Background" Value="{Binding $parent[Button].Background} "/>
+                        </Style>
+                    </Grid.Styles>        
+                </Grid>
+            </Border>
+        </Border>
+        <TextBox x:Name="ImageFileTextBox" Background="White" Foreground="Black" BorderBrush="Black" Margin="0, 30, 0, 0" />
+        <Grid x:Name="SaveLoadButtons" HorizontalAlignment="Center" RowDefinitions="Auto" ColumnDefinitions="Auto Auto" Margin="0, 20, 0, 0">
+
         </Grid>
     </StackPanel>
 
