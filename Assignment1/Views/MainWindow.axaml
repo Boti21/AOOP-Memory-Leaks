@@ -36,6 +36,9 @@
         <Grid x:Name="SaveLoadButtons" HorizontalAlignment="Center" RowDefinitions="Auto" ColumnDefinitions="Auto Auto" Margin="0, 20, 0, 0">
 
         </Grid>
+        <Grid x:Name="FlipButtons" HorizontalAlignment="Center" RowDefinitions="Auto" ColumnDefinitions="Auto Auto" Margin="0, 20, 0, 0">
+
+        </Grid>
     </StackPanel>
 
 </Window>

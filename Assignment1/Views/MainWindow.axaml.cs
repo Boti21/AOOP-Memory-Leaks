@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Runtime.InteropServices;
 
 using Avalonia;
@@ -39,6 +38,8 @@ public partial class MainWindow : Window
         DefineSaveLoadButtons();
 
         DefineRotateButton();
+
+        DefineFlipButtons();
     }
 
     private static IBrush GetColorFromValue(int value)
@@ -185,6 +186,57 @@ public partial class MainWindow : Window
 
             DisplaySizeInfo();
         };
+    }
+
+    private void DefineFlipButtons()
+    {
+        var verticalflipButton = MakeButton("V-Flip");
+
+        var horizontalflipButton = MakeButton("H-Flip");
+
+        Grid.SetColumn(verticalflipButton, 0);
+        Grid.SetColumn(horizontalflipButton, 1);
+
+        verticalflipButton.Click += (sender, e) =>
+        {
+            int[,] flipped_data = new int[NoRows, NoColumns];
+
+            for (int r = 0; r < NoRows; r++)
+            {
+                for (int c = 0; c < NoColumns; c++)
+                {
+                    flipped_data[NoRows - 1 - r, c] = data[r, c];
+                }
+            }
+
+            data = flipped_data;
+
+            GenerateGrid();
+
+            DisplaySizeInfo();
+        };
+
+        horizontalflipButton.Click += (sender, e) =>
+        {
+            int[,] flipped_data = new int[NoRows, NoColumns];
+
+            for (int r = 0; r < NoRows; r++)
+            {
+                for (int c = 0; c < NoColumns; c++)
+                {
+                    flipped_data[r, NoColumns - 1 - c] = data[r, c];
+                }
+            }
+
+            data = flipped_data;
+
+            GenerateGrid();
+
+            DisplaySizeInfo();
+        };
+
+        FlipButtons.Children.Add(verticalflipButton);
+        FlipButtons.Children.Add(horizontalflipButton);
     }
 
     static Button MakeButton(string content)
