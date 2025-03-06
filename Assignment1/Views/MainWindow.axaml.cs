@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Runtime.InteropServices;
 
 using Avalonia;
@@ -14,7 +13,7 @@ using Avalonia.Data;
 using System.IO.Enumeration;
 using Assignment1.Models;
 using System.Data;
-// using System.IO;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Avalonia.Markup.Xaml.Converters;
@@ -27,7 +26,7 @@ public partial class MainWindow : Window
 {
     int NoRows;
     int NoColumns;
-    int[,] data;
+    int[,] data; //Store the pixel values
 
     MainWindowViewModel viewmodel = new MainWindowViewModel();
 
@@ -42,9 +41,34 @@ public partial class MainWindow : Window
         DefineSaveLoadButtons();
 
         DefineRotateButton();
+
+        DefineFlipButtons();
     }
 
-    public void DisplaySizeInfo() // Display the current grid size for the image
+    private IBrush GetColorFromValue(int value)
+    {
+        return value switch // 16 color support
+        {
+            1 => new SolidColorBrush(Color.Parse("#000000")),
+            2 => new SolidColorBrush(Color.Parse("#ff0000")),
+            3 => new SolidColorBrush(Color.Parse("#00ff00")),
+            4 => new SolidColorBrush(Color.Parse("#0000ff")),
+            5 => new SolidColorBrush(Color.Parse("#ffff00")),
+            6 => new SolidColorBrush(Color.Parse("#ff00ff")),
+            7 => new SolidColorBrush(Color.Parse("#00ffff")),
+            8 => new SolidColorBrush(Color.Parse("#0fffff")),
+            9 => new SolidColorBrush(Color.Parse("#ff0fff")),
+            10 => new SolidColorBrush(Color.Parse("#ffff0f")),
+            11 => new SolidColorBrush(Color.Parse("#f0f0f0")),
+            12 => new SolidColorBrush(Color.Parse("#0f0f0f")),
+            13 => new SolidColorBrush(Color.Parse("#b0ffa0")),
+            14 => new SolidColorBrush(Color.Parse("#06afab")),
+            15 => new SolidColorBrush(Color.Parse("#60cd04")),
+            _ => Brushes.White  // Default case
+        };
+    }
+
+    private void DisplaySizeInfo() // Display the current grid size for the image
     {
         SizeTextBlock.Text = $"Size: {NoRows}x{NoColumns}";
         SizeTextBlock.Foreground = Brushes.Black;
@@ -57,11 +81,11 @@ public partial class MainWindow : Window
         DynamicGrid.ColumnDefinitions.Clear();
 
         for (int i = 0; i < NoRows; i++) {
-            DynamicGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            DynamicGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // Add rows
         }
 
         for (int j = 0; j < NoColumns; j++) {
-            DynamicGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            DynamicGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto }); // Add columns
         }
 
         for (int row=0; row<NoRows; row++) {
@@ -71,7 +95,7 @@ public partial class MainWindow : Window
                 // Need to capture the incrementing values, otherwise an out of bounds causes a crash
                 // This has to be some interpreted sorcery
 
-                var button = new Button {
+                var button = new Button { // Specific button for the image pixels to be clickable
                     HorizontalAlignment = HorizontalAlignment.Stretch,
                     VerticalAlignment = VerticalAlignment.Stretch,
                     BorderThickness = new Thickness(0.1),
@@ -167,7 +191,58 @@ public partial class MainWindow : Window
         };
     }
 
-    public Button MakeButton(string content)
+    private void DefineFlipButtons()
+    {
+        var verticalflipButton = MakeButton("V-Flip");
+
+        var horizontalflipButton = MakeButton("H-Flip");
+
+        Grid.SetColumn(verticalflipButton, 0);
+        Grid.SetColumn(horizontalflipButton, 1);
+
+        verticalflipButton.Click += (sender, e) =>
+        {
+            int[,] flipped_data = new int[NoRows, NoColumns];
+
+            for (int r = 0; r < NoRows; r++)
+            {
+                for (int c = 0; c < NoColumns; c++)
+                {
+                    flipped_data[NoRows - 1 - r, c] = data[r, c];
+                }
+            }
+
+            data = flipped_data;
+
+            GenerateGrid();
+
+            DisplaySizeInfo();
+        };
+
+        horizontalflipButton.Click += (sender, e) =>
+        {
+            int[,] flipped_data = new int[NoRows, NoColumns];
+
+            for (int r = 0; r < NoRows; r++)
+            {
+                for (int c = 0; c < NoColumns; c++)
+                {
+                    flipped_data[r, NoColumns - 1 - c] = data[r, c];
+                }
+            }
+
+            data = flipped_data;
+
+            GenerateGrid();
+
+            DisplaySizeInfo();
+        };
+
+        FlipButtons.Children.Add(verticalflipButton);
+        FlipButtons.Children.Add(horizontalflipButton);
+    }
+
+    static Button MakeButton(string content)
     {
         var button = new Button
         {
