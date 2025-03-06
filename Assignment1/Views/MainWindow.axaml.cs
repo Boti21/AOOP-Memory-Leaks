@@ -26,12 +26,6 @@ public partial class MainWindow : Window
 {
     int NoRows;
     int NoColumns;
-    /*int[,] data = { {0, 1, 0, 0, 0, 1, 0},
-                    {0, 0, 0 ,0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0},
-                    {1, 0, 0, 0, 0, 0, 1},
-                    {0, 1, 1, 1, 1, 1, 0}};*/
     int[,] data;
 
     public MainWindow()
@@ -41,10 +35,6 @@ public partial class MainWindow : Window
         this.Height = 500;
 
         this.Background = Brushes.White;
-
-        DisplaySizeInfo();
-
-        //GenerateGrid();
 
         DefineSaveLoadButtons();
 
@@ -158,6 +148,8 @@ public partial class MainWindow : Window
             ReadFile(filePath, out NoRows, out NoColumns, out data);
 
             GenerateGrid();
+
+            DisplaySizeInfo();
         };
 
         SaveLoadButtons.Children.Add(saveButton);
@@ -184,30 +176,14 @@ public partial class MainWindow : Window
                 }
             }
 
-            for (int i = 0; i < data.GetLength(0); i++)
-            {
-                for (int j = 0; j < data.GetLength(1); j++)
-                {
-                    Console.Write(data[i, j] + " ");
-                }
-                Console.WriteLine();
-            }
-
             data = rotated_data;
             var temp = NoRows;
             NoRows = NoColumns;
             NoColumns = temp;
 
-            for (int i = 0; i < rotated_data.GetLength(0); i++)
-            {
-                for (int j = 0; j < rotated_data.GetLength(1); j++)
-                {
-                    Console.Write(rotated_data[i, j] + " ");
-                }
-                Console.WriteLine();
-            }
-
             GenerateGrid();
+
+            DisplaySizeInfo();
         };
     }
 
