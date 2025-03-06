@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Runtime.InteropServices;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -14,19 +16,22 @@ using Assignment1.Models;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using Avalonia.Markup.Xaml.Converters;
 
 namespace Assignment1.Views;
 
 public partial class MainWindow : Window
 {
-    int NoRows = 6;
-    int NoColumns = 7;
-    int[,] data = { {0, 1, 0, 0, 0, 1, 0},
+    int NoRows;
+    int NoColumns;
+    /*int[,] data = { {0, 1, 0, 0, 0, 1, 0},
                     {0, 0, 0 ,0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0},
                     {1, 0, 0, 0, 0, 0, 1},
-                    {0, 1, 1, 1, 1, 1, 0}};
+                    {0, 1, 1, 1, 1, 1, 0}};*/
+    int[,] data;
 
     public MainWindow()
     {
@@ -38,12 +43,12 @@ public partial class MainWindow : Window
 
         DisplaySizeInfo();
 
-        GenerateGrid();
+        //GenerateGrid();
 
         MakeButtons();
     }
 
-    private IBrush GetColorFromValue(int value)
+    private static IBrush GetColorFromValue(int value)
     {
         return value switch
         {
@@ -156,16 +161,24 @@ public partial class MainWindow : Window
 
         saveButton.Click += (sender, e) => // Add the save functionality when pressing the save button
         {
-            var filePath = ImageFileTextBox.Text;
+            var fileName = ImageFileTextBox.Text.ToString();
+
+            SaveFile(fileName, NoRows, NoColumns, data);
+
+            SaveImage(fileName, NoRows, NoColumns, data);
             //SerializeToFile(filePath); // Ask Boti
         };
 
         loadButton.Click += (sender, e) => // Add the load functionality when pressing the load button
         {
             var filePathElements = ImageFileTextBox.Text.Split('/');
-            var filePath = filePathElements.Last();
+            string fileName = filePathElements.Last().ToString();
+
+            string filePath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "ImageFiles", fileName);
 
             ReadFile(filePath, out NoRows, out NoColumns, out data);
+
+            GenerateGrid();
         };
 
         SaveLoadButtons.Children.Add(saveButton);
@@ -187,9 +200,78 @@ public partial class MainWindow : Window
         {
             for (int c = 0; c < columns; c++)
             {
-                pixelValues[r, c] = Convert.ToInt32(lines[1][index]);
+                pixelValues[r, c] = lines[1][index] - '0';
                 index++;
             }
         }
+    }
+
+    static void SaveFile(string fileName, int rows, int columns, int[,] pixelValues)
+    {
+        var filePath = Path.Join("ImageFiles", fileName);
+        using (StreamWriter writer = new StreamWriter(filePath))
+        {
+            writer.WriteLine($"{rows} {columns}");
+
+            for (int r = 0; r < rows; r++)
+            {
+                for (int c = 0; c < columns; c++)
+                {
+                    writer.Write(pixelValues[r, c]);
+                }
+            }
+            writer.WriteLine();
+        }
+        Console.WriteLine(filePath);
+    }
+
+    static void SaveImage(string fileName, int rows, int columns, int[,] pixelValues)
+    {
+        PixelSize pixelSize = new PixelSize(columns, rows);
+        Vector dpi = new Vector(96, 96);
+
+        WriteableBitmap bitmap = new WriteableBitmap(pixelSize, dpi, PixelFormat.Bgra8888, AlphaFormat.Premul);
+        
+        using(var buffer = bitmap.Lock())
+        {
+            IntPtr pointer = buffer.Address;
+
+            for (int r = 0; r < rows; r++)
+            {
+                for (int c = 0; c < columns; c++)
+                
+                {
+                    int offset = (r * columns + c) * 4;  // Adjust for 4 bytes per pixel
+
+                    var colorBrush = GetColorFromValue(pixelValues[r, c]);
+
+                    byte alpha, red, green, blue;
+                    
+                    if (colorBrush is SolidColorBrush solidBrush)
+                    {
+                        var color = solidBrush.Color;
+
+                        alpha = color.A;  // Alpha
+                        red = color.R;    // Red
+                        green = color.G;  // Green
+                        blue = color.B;   // Blue
+                    }
+                    else
+                    {
+                        alpha = 255;
+                        red = 255;
+                        green = 255;
+                        blue = 255;
+                    }
+                    Marshal.WriteByte(pointer + offset, blue);  // Blue
+                    Marshal.WriteByte(pointer + offset + 1, green);  // Green
+                    Marshal.WriteByte(pointer + offset + 2, red);  // Red
+                    Marshal.WriteByte(pointer + offset + 3, alpha);  // Alpha
+                }
+            }
+        }
+        fileName = fileName.Split('.')[0];
+        var filePath = Path.Join("Images", fileName + ".jpg");
+        bitmap.Save(filePath);
     }
 }
