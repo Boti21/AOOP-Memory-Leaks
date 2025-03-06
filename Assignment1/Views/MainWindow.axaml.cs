@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Avalonia.Markup.Xaml.Converters;
+using Tmds.DBus.Protocol;
 
 namespace Assignment1.Views;
 
@@ -45,7 +46,9 @@ public partial class MainWindow : Window
 
         //GenerateGrid();
 
-        MakeButtons();
+        DefineSaveLoadButtons();
+
+        DefineRotateButton();
     }
 
     private static IBrush GetColorFromValue(int value)
@@ -126,35 +129,11 @@ public partial class MainWindow : Window
         }
     }
 
-    private void MakeButtons() // Create and adjust the Save Load buttons as desired
+    private void DefineSaveLoadButtons() // Create and adjust the Save Load buttons as desired
     {
-        var saveButton = new Button
-        {
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Stretch,
-            BorderThickness = new Thickness(0.1),
-            BorderBrush = Brushes.Black,
-            CornerRadius = new CornerRadius(0),
-            Width = 100,
-            Height = 30,
-            Background = Brushes.Gray,
-            Content = "Save",
-            HorizontalContentAlignment = HorizontalAlignment.Center
-        };
+        var saveButton = MakeButton("Save");
 
-        var loadButton = new Button
-        {
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Stretch,
-            BorderThickness = new Thickness(0.1),
-            BorderBrush = Brushes.Black,
-            CornerRadius = new CornerRadius(0),
-            Width = 100,
-            Height = 30,
-            Background = Brushes.Gray,
-            Content = "Load",
-            HorizontalContentAlignment = HorizontalAlignment.Center
-        };
+        var loadButton = MakeButton("Load");
 
         Grid.SetColumn(saveButton, 0);
         Grid.SetColumn(loadButton, 1);
@@ -183,6 +162,72 @@ public partial class MainWindow : Window
 
         SaveLoadButtons.Children.Add(saveButton);
         SaveLoadButtons.Children.Add(loadButton);
+    }
+
+    public void DefineRotateButton()
+    {
+        var rotateButton = MakeButton("Rotate");
+
+        rotateButton.Margin = new Thickness(0, 25, 0, 0);
+
+        ParentStackPanel.Children.Add(rotateButton);
+
+        rotateButton.Click += (sender, e) =>
+        {
+            int[,] rotated_data = new int[NoColumns, NoRows];
+
+            for (int r = 0; r < NoRows; r++)
+            {
+                for (int c = 0; c < NoColumns; c++)
+                {
+                    rotated_data[c, NoRows - 1 - r] = data[r, c];
+                }
+            }
+
+            for (int i = 0; i < data.GetLength(0); i++)
+            {
+                for (int j = 0; j < data.GetLength(1); j++)
+                {
+                    Console.Write(data[i, j] + " ");
+                }
+                Console.WriteLine();
+            }
+
+            data = rotated_data;
+            var temp = NoRows;
+            NoRows = NoColumns;
+            NoColumns = temp;
+
+            for (int i = 0; i < rotated_data.GetLength(0); i++)
+            {
+                for (int j = 0; j < rotated_data.GetLength(1); j++)
+                {
+                    Console.Write(rotated_data[i, j] + " ");
+                }
+                Console.WriteLine();
+            }
+
+            GenerateGrid();
+        };
+    }
+
+    static Button MakeButton(string content)
+    {
+        var button = new Button
+        {
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Stretch,
+            BorderThickness = new Thickness(0.1),
+            BorderBrush = Brushes.Black,
+            CornerRadius = new CornerRadius(0),
+            Width = 100,
+            Height = 30,
+            Background = Brushes.Gray,
+            Content = content,
+            HorizontalContentAlignment = HorizontalAlignment.Center
+        };
+
+        return button;
     }
 
     static void ReadFile(string filePath, out int rows, out int columns, out int[,] pixelValues)
