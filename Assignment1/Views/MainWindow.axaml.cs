@@ -14,11 +14,12 @@ using Avalonia.Data;
 using System.IO.Enumeration;
 using Assignment1.Models;
 using System.Data;
-using System.IO;
+// using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Avalonia.Markup.Xaml.Converters;
 using Tmds.DBus.Protocol;
+using Assignment1.ViewModels;
 
 namespace Assignment1.Views;
 
@@ -27,6 +28,8 @@ public partial class MainWindow : Window
     int NoRows;
     int NoColumns;
     int[,] data;
+
+    MainWindowViewModel viewmodel = new MainWindowViewModel();
 
     public MainWindow()
     {
@@ -41,30 +44,7 @@ public partial class MainWindow : Window
         DefineRotateButton();
     }
 
-    private static IBrush GetColorFromValue(int value)
-    {
-        return value switch
-        {
-            1 => new SolidColorBrush(Color.Parse("#000000")),
-            2 => new SolidColorBrush(Color.Parse("#ff0000")),
-            3 => new SolidColorBrush(Color.Parse("#00ff00")),
-            4 => new SolidColorBrush(Color.Parse("#0000ff")),
-            5 => new SolidColorBrush(Color.Parse("#ffff00")),
-            6 => new SolidColorBrush(Color.Parse("#ff00ff")),
-            7 => new SolidColorBrush(Color.Parse("#00ffff")),
-            8 => new SolidColorBrush(Color.Parse("#0fffff")),
-            9 => new SolidColorBrush(Color.Parse("#ff0fff")),
-            10 => new SolidColorBrush(Color.Parse("#ffff0f")),
-            11 => new SolidColorBrush(Color.Parse("#f0f0f0")),
-            12 => new SolidColorBrush(Color.Parse("#0f0f0f")),
-            13 => new SolidColorBrush(Color.Parse("#b0ffa0")),
-            14 => new SolidColorBrush(Color.Parse("#06afab")),
-            15 => new SolidColorBrush(Color.Parse("#60cd04")),
-            _ => Brushes.White  // Default case
-        };
-    }
-
-    private void DisplaySizeInfo() // Display the current grid size for the image
+    public void DisplaySizeInfo() // Display the current grid size for the image
     {
         SizeTextBlock.Text = $"Size: {NoRows}x{NoColumns}";
         SizeTextBlock.Foreground = Brushes.Black;
@@ -72,7 +52,7 @@ public partial class MainWindow : Window
         SizeTextBlock.FontSize = 24;
     }
 
-    private void GenerateGrid() {
+    public void GenerateGrid() {
         DynamicGrid.RowDefinitions.Clear();
         DynamicGrid.ColumnDefinitions.Clear();
 
@@ -101,12 +81,12 @@ public partial class MainWindow : Window
                     Height = 30,
                 };
 
-                button.Background = GetColorFromValue(data[r, c]);
+                button.Background = viewmodel.GetColorFromValue(data[r, c]);
 
                 button.Click += (sender, e) =>
                 {
                     data[r, c] = (data[r, c] + 1) % 16;
-                    button.Background = GetColorFromValue(data[r, c]);
+                    button.Background = viewmodel.GetColorFromValue(data[r, c]);
 
                     // Console.WriteLine("value: "+ data[r, c]); // Debugging
                 };
@@ -119,7 +99,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private void DefineSaveLoadButtons() // Create and adjust the Save Load buttons as desired
+    public void DefineSaveLoadButtons() // Create and adjust the Save Load buttons as desired
     {
         var saveButton = MakeButton("Save");
 
@@ -132,9 +112,9 @@ public partial class MainWindow : Window
         {
             var fileName = ImageFileTextBox.Text.ToString();
 
-            SaveFile(fileName, NoRows, NoColumns, data);
+            viewmodel.SaveFile(fileName, NoRows, NoColumns, data);
 
-            SaveImage(fileName, NoRows, NoColumns, data);
+            viewmodel.SaveImage(fileName, NoRows, NoColumns, data);
             //SerializeToFile(filePath); // Ask Boti
         };
 
@@ -145,7 +125,7 @@ public partial class MainWindow : Window
 
             string filePath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "ImageFiles", fileName);
 
-            ReadFile(filePath, out NoRows, out NoColumns, out data);
+            viewmodel.ReadFile(filePath, out NoRows, out NoColumns, out data);
 
             GenerateGrid();
 
@@ -187,7 +167,7 @@ public partial class MainWindow : Window
         };
     }
 
-    static Button MakeButton(string content)
+    public Button MakeButton(string content)
     {
         var button = new Button
         {
@@ -204,95 +184,5 @@ public partial class MainWindow : Window
         };
 
         return button;
-    }
-
-    static void ReadFile(string filePath, out int rows, out int columns, out int[,] pixelValues)
-    {
-        string[] lines = File.ReadAllLines(filePath);
-
-        string[] dims = lines[0].Split(' '); // Split rows and columns number by empty space for now
-        rows = Convert.ToInt32(dims[0]);
-        columns = Convert.ToInt32(dims[1]);
-
-        pixelValues = new int[rows, columns]; // Create array based on number of rows and columns to split pixel values correctly
-
-        int index = 0;
-        for (int r = 0; r < rows; r++)
-        {
-            for (int c = 0; c < columns; c++)
-            {
-                pixelValues[r, c] = lines[1][index] - '0';
-                index++;
-            }
-        }
-    }
-
-    static void SaveFile(string fileName, int rows, int columns, int[,] pixelValues)
-    {
-        var filePath = Path.Join("ImageFiles", fileName);
-        using (StreamWriter writer = new StreamWriter(filePath))
-        {
-            writer.WriteLine($"{rows} {columns}");
-
-            for (int r = 0; r < rows; r++)
-            {
-                for (int c = 0; c < columns; c++)
-                {
-                    writer.Write(pixelValues[r, c]);
-                }
-            }
-            writer.WriteLine();
-        }
-        Console.WriteLine(filePath);
-    }
-
-    static void SaveImage(string fileName, int rows, int columns, int[,] pixelValues)
-    {
-        PixelSize pixelSize = new PixelSize(columns, rows);
-        Vector dpi = new Vector(96, 96);
-
-        WriteableBitmap bitmap = new WriteableBitmap(pixelSize, dpi, PixelFormat.Bgra8888, AlphaFormat.Premul);
-        
-        using(var buffer = bitmap.Lock())
-        {
-            IntPtr pointer = buffer.Address;
-
-            for (int r = 0; r < rows; r++)
-            {
-                for (int c = 0; c < columns; c++)
-                
-                {
-                    int offset = (r * columns + c) * 4;  // Adjust for 4 bytes per pixel
-
-                    var colorBrush = GetColorFromValue(pixelValues[r, c]);
-
-                    byte alpha, red, green, blue;
-                    
-                    if (colorBrush is SolidColorBrush solidBrush)
-                    {
-                        var color = solidBrush.Color;
-
-                        alpha = color.A;  // Alpha
-                        red = color.R;    // Red
-                        green = color.G;  // Green
-                        blue = color.B;   // Blue
-                    }
-                    else
-                    {
-                        alpha = 255;
-                        red = 255;
-                        green = 255;
-                        blue = 255;
-                    }
-                    Marshal.WriteByte(pointer + offset, blue);  // Blue
-                    Marshal.WriteByte(pointer + offset + 1, green);  // Green
-                    Marshal.WriteByte(pointer + offset + 2, red);  // Red
-                    Marshal.WriteByte(pointer + offset + 3, alpha);  // Alpha
-                }
-            }
-        }
-        fileName = fileName.Split('.')[0];
-        var filePath = Path.Join("Images", fileName + ".jpg");
-        bitmap.Save(filePath);
     }
 }
