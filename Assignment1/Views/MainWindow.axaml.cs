@@ -25,7 +25,7 @@ public partial class MainWindow : Window
 {
     int NoRows;
     int NoColumns;
-    int[,] data;
+    int[,] data; //Store the pixel values
 
     public MainWindow()
     {
@@ -44,7 +44,7 @@ public partial class MainWindow : Window
 
     private static IBrush GetColorFromValue(int value)
     {
-        return value switch
+        return value switch // 16 color support
         {
             1 => new SolidColorBrush(Color.Parse("#000000")),
             2 => new SolidColorBrush(Color.Parse("#ff0000")),
@@ -78,11 +78,11 @@ public partial class MainWindow : Window
         DynamicGrid.ColumnDefinitions.Clear();
 
         for (int i = 0; i < NoRows; i++) {
-            DynamicGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            DynamicGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto }); // Add rows
         }
 
         for (int j = 0; j < NoColumns; j++) {
-            DynamicGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            DynamicGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto }); // Add columns
         }
 
         for (int row=0; row<NoRows; row++) {
@@ -92,7 +92,7 @@ public partial class MainWindow : Window
                 // Need to capture the incrementing values, otherwise an out of bounds causes a crash
                 // This has to be some interpreted sorcery
 
-                var button = new Button {
+                var button = new Button { // Specific button for the image pixels to be clickable
                     HorizontalAlignment = HorizontalAlignment.Stretch,
                     VerticalAlignment = VerticalAlignment.Stretch,
                     BorderThickness = new Thickness(0.1),
