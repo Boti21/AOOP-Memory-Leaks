@@ -1,23 +1,32 @@
 using System;
+using System.IO;
+using System.Runtime.InteropServices;
+
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Layout;
 using Avalonia.Media.Imaging;
 using Avalonia.Media;
 using Avalonia.Platform;
+using Avalonia.Styling;
+using Avalonia.Data;
+using System.IO.Enumeration;
+using Assignment1.Models;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using Avalonia.Markup.Xaml.Converters;
+using Tmds.DBus.Protocol;
 
 namespace Assignment1.Views;
 
 public partial class MainWindow : Window
 {
-    int NoRows = 6;
-    int NoColumns = 5;
-    int[,] data = { {0, 0, 0, 0, 0},
-                    {0, 13, 0, 13, 0},
-                    {0, 0, 0, 0, 0},
-                    {1, 0, 0, 0, 1},
-                    {0, 1, 1, 1, 0},
-                    {0, 0, 0, 0, 0}};
+    int NoRows;
+    int NoColumns;
+    int[,] data;
 
     public MainWindow()
     {
@@ -25,10 +34,14 @@ public partial class MainWindow : Window
         this.Width = 600; 
         this.Height = 500;
 
-        GenerateGrid();
+        this.Background = Brushes.White;
+
+        DefineSaveLoadButtons();
+
+        DefineRotateButton();
     }
 
-    private IBrush GetColorFromValue(int value)
+    private static IBrush GetColorFromValue(int value)
     {
         return value switch
         {
@@ -51,6 +64,14 @@ public partial class MainWindow : Window
         };
     }
 
+    private void DisplaySizeInfo() // Display the current grid size for the image
+    {
+        SizeTextBlock.Text = $"Size: {NoRows}x{NoColumns}";
+        SizeTextBlock.Foreground = Brushes.Black;
+        SizeTextBlock.FontFamily = "Comic Sans"; // Because Yes.
+        SizeTextBlock.FontSize = 24;
+    }
+
     private void GenerateGrid() {
         DynamicGrid.RowDefinitions.Clear();
         DynamicGrid.ColumnDefinitions.Clear();
@@ -71,9 +92,9 @@ public partial class MainWindow : Window
                 // This has to be some interpreted sorcery
 
                 var button = new Button {
-                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch,
-                    VerticalAlignment = Avalonia.Layout.VerticalAlignment.Stretch,
-                    BorderThickness = new Thickness(0.3),
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    BorderThickness = new Thickness(0.1),
                     BorderBrush = Brushes.Black,
                     CornerRadius = new CornerRadius(0),
                     Width = 40,
@@ -96,6 +117,182 @@ public partial class MainWindow : Window
                 DynamicGrid.Children.Add(button);
             }
         }
+    }
 
+    private void DefineSaveLoadButtons() // Create and adjust the Save Load buttons as desired
+    {
+        var saveButton = MakeButton("Save");
+
+        var loadButton = MakeButton("Load");
+
+        Grid.SetColumn(saveButton, 0);
+        Grid.SetColumn(loadButton, 1);
+
+        saveButton.Click += (sender, e) => // Add the save functionality when pressing the save button
+        {
+            var fileName = ImageFileTextBox.Text.ToString();
+
+            SaveFile(fileName, NoRows, NoColumns, data);
+
+            SaveImage(fileName, NoRows, NoColumns, data);
+            //SerializeToFile(filePath); // Ask Boti
+        };
+
+        loadButton.Click += (sender, e) => // Add the load functionality when pressing the load button
+        {
+            var filePathElements = ImageFileTextBox.Text.Split('/');
+            string fileName = filePathElements.Last().ToString();
+
+            string filePath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "ImageFiles", fileName);
+
+            ReadFile(filePath, out NoRows, out NoColumns, out data);
+
+            GenerateGrid();
+
+            DisplaySizeInfo();
+        };
+
+        SaveLoadButtons.Children.Add(saveButton);
+        SaveLoadButtons.Children.Add(loadButton);
+    }
+
+    public void DefineRotateButton()
+    {
+        var rotateButton = MakeButton("Rotate");
+
+        rotateButton.Margin = new Thickness(0, 25, 0, 0);
+
+        ParentStackPanel.Children.Add(rotateButton);
+
+        rotateButton.Click += (sender, e) =>
+        {
+            int[,] rotated_data = new int[NoColumns, NoRows];
+
+            for (int r = 0; r < NoRows; r++)
+            {
+                for (int c = 0; c < NoColumns; c++)
+                {
+                    rotated_data[c, NoRows - 1 - r] = data[r, c];
+                }
+            }
+
+            data = rotated_data;
+            var temp = NoRows;
+            NoRows = NoColumns;
+            NoColumns = temp;
+
+            GenerateGrid();
+
+            DisplaySizeInfo();
+        };
+    }
+
+    static Button MakeButton(string content)
+    {
+        var button = new Button
+        {
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Stretch,
+            BorderThickness = new Thickness(0.1),
+            BorderBrush = Brushes.Black,
+            CornerRadius = new CornerRadius(0),
+            Width = 100,
+            Height = 30,
+            Background = Brushes.Gray,
+            Content = content,
+            HorizontalContentAlignment = HorizontalAlignment.Center
+        };
+
+        return button;
+    }
+
+    static void ReadFile(string filePath, out int rows, out int columns, out int[,] pixelValues)
+    {
+        string[] lines = File.ReadAllLines(filePath);
+
+        string[] dims = lines[0].Split(' '); // Split rows and columns number by empty space for now
+        rows = Convert.ToInt32(dims[0]);
+        columns = Convert.ToInt32(dims[1]);
+
+        pixelValues = new int[rows, columns]; // Create array based on number of rows and columns to split pixel values correctly
+
+        int index = 0;
+        for (int r = 0; r < rows; r++)
+        {
+            for (int c = 0; c < columns; c++)
+            {
+                pixelValues[r, c] = lines[1][index] - '0';
+                index++;
+            }
+        }
+    }
+
+    static void SaveFile(string fileName, int rows, int columns, int[,] pixelValues)
+    {
+        var filePath = Path.Join("ImageFiles", fileName);
+        using (StreamWriter writer = new StreamWriter(filePath))
+        {
+            writer.WriteLine($"{rows} {columns}");
+
+            for (int r = 0; r < rows; r++)
+            {
+                for (int c = 0; c < columns; c++)
+                {
+                    writer.Write(pixelValues[r, c]);
+                }
+            }
+            writer.WriteLine();
+        }
+        Console.WriteLine(filePath);
+    }
+
+    static void SaveImage(string fileName, int rows, int columns, int[,] pixelValues)
+    {
+        PixelSize pixelSize = new PixelSize(columns, rows);
+        Vector dpi = new Vector(96, 96);
+
+        WriteableBitmap bitmap = new WriteableBitmap(pixelSize, dpi, PixelFormat.Bgra8888, AlphaFormat.Premul);
+        
+        using(var buffer = bitmap.Lock())
+        {
+            IntPtr pointer = buffer.Address;
+
+            for (int r = 0; r < rows; r++)
+            {
+                for (int c = 0; c < columns; c++)
+                
+                {
+                    int offset = (r * columns + c) * 4;  // Adjust for 4 bytes per pixel
+
+                    var colorBrush = GetColorFromValue(pixelValues[r, c]);
+
+                    byte alpha, red, green, blue;
+                    
+                    if (colorBrush is SolidColorBrush solidBrush)
+                    {
+                        var color = solidBrush.Color;
+
+                        alpha = color.A;  // Alpha
+                        red = color.R;    // Red
+                        green = color.G;  // Green
+                        blue = color.B;   // Blue
+                    }
+                    else
+                    {
+                        alpha = 255;
+                        red = 255;
+                        green = 255;
+                        blue = 255;
+                    }
+                    Marshal.WriteByte(pointer + offset, blue);  // Blue
+                    Marshal.WriteByte(pointer + offset + 1, green);  // Green
+                    Marshal.WriteByte(pointer + offset + 2, red);  // Red
+                    Marshal.WriteByte(pointer + offset + 3, alpha);  // Alpha
+                }
+            }
+        }
+        fileName = fileName.Split('.')[0];
+        var filePath = Path.Join("Images", fileName + ".jpg");
+        bitmap.Save(filePath);
     }
 }
