@@ -1,21 +1,32 @@
-// using Assignment2.Models
+using System;
+using System.IO;
 
 namespace Assignment2.Models;
 
 public class MainWindowModel
 {
     public Subject subject { get; }
-    public Teacher teacher { get; set; }
+    public Teacher user { get; set; }
     public MainWindowModel() {
         subject = new Subject("MATH3", "It will not be taught at all");
-        teacher = new Teacher();
+        user = new Teacher();
     }
 
     // public login (string iuser, string ipass) {
         
     // }
 
+    // public void register (string iuser, string ipass) {
+    //     teacher.register(iuser, ipass);
+    // }
     public void register (string iuser, string ipass) {
-        teacher.register(iuser, ipass);
-    }
+        string filePath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Assets", "user_data.json");
+        string content = iuser + "; \nPass: " + ipass;
+        if (user.isteacher) content += "\nSubjects created: ";
+        else content += "\nSubjects enrolled: ";
+
+        using (StreamWriter outputFile = new StreamWriter(filePath)) {
+            outputFile.WriteLine(content);
+        }
+    } 
 }
