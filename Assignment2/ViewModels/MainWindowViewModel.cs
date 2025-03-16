@@ -1,6 +1,18 @@
-﻿namespace Assignment2.ViewModels;
+﻿using Assignment2.Models;
+
+namespace Assignment2.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    public string Greeting { get; } = "Welcome to Avalonia!";
+    
+    private MainWindowModel Model;
+
+    public string Greeting { get; }
+    public MainWindowViewModel()
+    {
+        Model = new MainWindowModel(); // Instantiate the model
+        Model.teacher.register("Bjarne", "apparatus1234");
+        Greeting = Model.subject.name;
+    }
+
 }
