@@ -12,7 +12,8 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         Model = new MainWindowModel(); // Instantiate the model
         Model.register("Bjarne", "apparatus1234");
-        Greeting = Model.subject.name;
+        Model.login("Bjarne", "apparatus1234");
+        Model.login("Paride", "fakenews");
     }
 
 }
