@@ -15,6 +15,7 @@ public class MainWindowModel
         subject = new Subject("MATH3", "It will not be taught at all");
         user = new Teacher();
     }
+
     public int register (string iuser, string ipass) {
 
         if(File.ReadAllText(filePath).Contains(iuser)) {
