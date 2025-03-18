@@ -1,5 +1,34 @@
-
-
-Bjarne; 
-Pass: apparatus1234
-Subjects created: 
+[
+  {
+    "type": "teacher",
+    "subjects": null,
+    "id": 0,
+    "name": null,
+    "username": "Bjarne",
+    "password": "apparatus1234"
+  },
+  {
+    "type": "teacher",
+    "subjects": null,
+    "id": 0,
+    "name": null,
+    "username": "Fateme",
+    "password": "WHAAAT??"
+  },
+  {
+    "type": "student",
+    "enrolledSubjects": null,
+    "id": 0,
+    "name": null,
+    "username": "Balage",
+    "password": "tricking2000"
+  },
+  {
+    "type": "student",
+    "enrolledSubjects": null,
+    "id": 0,
+    "name": null,
+    "username": "Arturo",
+    "password": "pogacs4"
+  }
+]
