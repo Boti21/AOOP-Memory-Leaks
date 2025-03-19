@@ -1,5 +1,5 @@
 # AOOP-Memory-Leaks
-SDU Advanced Object-Oriented Programming repo for projects
+SDU Advanced Object-Oriented Programming Assignment 1
 
 ### Group members
 - Balazs Szakal
