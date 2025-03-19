@@ -14,7 +14,7 @@ public class MainWindowModel
     private string data { get; set; }
     private User current_user { get; set; }
     public List<User> users { get; set; }
-    public List<Subjects> subjects { get; set; }
+    public List<Subject> subjects { get; set; }
 
 
     private static readonly JsonSerializerOptions jsonOptions = new() {

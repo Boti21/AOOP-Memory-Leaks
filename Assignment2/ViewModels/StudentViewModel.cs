@@ -12,14 +12,14 @@ public partial class StudentViewModel : ViewModelBase
 
     public StudentViewModel()
     {
-        Subject temp_subject = new Subject("asd", "foo");
+        Subject temp_subject = new Subject("asd", "foo", "Bjarne");
         subjects.Add(temp_subject);
     }
 
     [RelayCommand]
     public void setup()
     {
-        Subject temp_subject = new Subject("asd", "foo");
+        Subject temp_subject = new Subject("asd", "foo", "Bjarne");
         subjects.Add(temp_subject);
     }
     
