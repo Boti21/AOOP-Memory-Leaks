@@ -4,6 +4,9 @@ using System.Collections.Generic;
 namespace Assignment2.Models;
 
 public class Teacher : User {
-    public List<int> subjects { get; set; }
+    public List<Subject> subjects { get; set; }
+    public Teacher() {
+        subjects = new List<Subject>();
+    }
     // public override bool isteacher { get; } = true;
 }
