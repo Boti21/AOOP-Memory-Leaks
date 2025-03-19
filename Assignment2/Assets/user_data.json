@@ -2,9 +2,7 @@
   "users": [
     {
       "type": "teacher",
-      "subjects": [
-        0
-      ],
+      "subjects": [],
       "id": 0,
       "name": null,
       "username": "Bjarne",
@@ -20,9 +18,7 @@
     },
     {
       "type": "student",
-      "enrolledSubjects": [
-        0
-      ],
+      "enrolledSubjects": [],
       "id": 2,
       "name": null,
       "username": "Balage",
@@ -39,13 +35,11 @@
   ],
   "subjects": [
     {
-      "name": "MATH1",
-      "id": 0,
-      "details": "The best course you\u0027ll ever have",
+      "name": "Dynamics",
+      "id": 1,
+      "details": "The other best course",
       "teacher": 0,
-      "studentsEnrolled": [
-        2
-      ]
+      "studentsEnrolled": []
     }
   ]
 }

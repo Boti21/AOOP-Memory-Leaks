@@ -31,6 +31,12 @@ public partial class MainWindowViewModel : ViewModelBase
         Model.login("Balage", "tricking2000");
         Model.enroll_subject("MATH3");
         Model.enroll_subject("MATH1");
+        Model.login("Bjarne", "apparatus1234");
+        Model.create_subject("Dynamics", "The other best course", "Bjarne");
+        Model.delete_subject("MATH1");
+        Model.login("Arturo", "pogacs4");
+        Model.enroll_subject("Dynamics");
+        Model.drop_subject("Dynamics");
         // currentView = _loginView;
         
     }
