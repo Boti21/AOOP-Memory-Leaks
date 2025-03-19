@@ -12,7 +12,9 @@ public class MainWindowModel
 {
     private string filePath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Assets", "user_data.json");
     private string data { get; set; }
+    private User current_user { get; set; }
     public List<User> users { get; set; }
+    public List<Subjects> subjects { get; set; }
 
 
     private static readonly JsonSerializerOptions jsonOptions = new() {
@@ -44,11 +46,11 @@ public class MainWindowModel
             users = new List<User>(); // If file doesn't exist, create a new list
         }
 
-        User user = isteacher ? new Teacher() : new Student();
+        current_user = isteacher ? new Teacher() : new Student();
 
-        user.username = iuser;
-        user.password = ipass;
-        users.Add(user);
+        current_user.username = iuser;
+        current_user.password = ipass;
+        users.Add(current_user);
 
         data = JsonSerializer.Serialize(users, jsonOptions);
 
@@ -69,7 +71,7 @@ public class MainWindowModel
             users = JsonSerializer.Deserialize<List<User>>(data, jsonOptions) ?? new List<User>();
         }
 
-        User user = users.Find(user => user.username == iuser);
+        current_user = users.Find(user => current_user.username == iuser);
 
         if(user.password == ipass) {
             Console.WriteLine("Match");
@@ -78,5 +80,14 @@ public class MainWindowModel
 
         Console.WriteLine("No match.. :/");
         return 0;
+    }
+
+    public int create_subject (string iname, string idetails) {
+        if (current_user.GetType() != Teacher) return -1;
+        Subject subject = new Subject(iname, idetails, current_user.username);
+        Teacher current_teacher = (Teacher)current_user;
+        current_teacher.subjects.Add(subject);
+        subject.Add(subject);
+        
     }
 }
