@@ -8,13 +8,18 @@ using System.Collections.Generic;
 namespace Assignment2.Models;
 
 
+public class ModelData {
+    public List<User> users { get; set; }
+    public List<Subject> subjects { get; set; }
+}
 public class MainWindowModel
 {
     private string filePath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Assets", "user_data.json");
     private string data { get; set; }
     private User current_user { get; set; }
     public List<User> users { get; set; }
-    public List<Subjects> subjects { get; set; }
+    public List<Subject> subjects { get; set; }
+    private ModelData modelData { get; set; }
 
 
     private static readonly JsonSerializerOptions jsonOptions = new() {
@@ -24,10 +29,15 @@ public class MainWindowModel
     };
 
     public MainWindowModel() {
+        modelData = new ModelData();
+        subjects = new List<Subject>();
+        users = new List<User>();
         if (File.Exists(filePath)) {
             data = File.ReadAllText(filePath);
             if (!string.IsNullOrWhiteSpace(data)) {
-                users = JsonSerializer.Deserialize<List<User>>(data, jsonOptions) ?? new List<User>();
+                modelData = JsonSerializer.Deserialize<ModelData>(data, jsonOptions) ?? new ModelData();
+                users = modelData.users;
+                subjects = modelData.subjects;
             }
         }
     }
@@ -40,7 +50,9 @@ public class MainWindowModel
             }
             // Read data in again in someone changed it on disk
             data = File.ReadAllText(filePath);
-            users = JsonSerializer.Deserialize<List<User>>(data, jsonOptions) ?? new List<User>();
+            modelData = JsonSerializer.Deserialize<ModelData>(data, jsonOptions) ?? new ModelData();
+            users = modelData.users;
+            subjects = modelData.subjects;
         }
         else {
             users = new List<User>(); // If file doesn't exist, create a new list
@@ -52,7 +64,9 @@ public class MainWindowModel
         current_user.password = ipass;
         users.Add(current_user);
 
-        data = JsonSerializer.Serialize(users, jsonOptions);
+        modelData.users = users;
+        modelData.subjects = subjects;
+        data = JsonSerializer.Serialize(modelData, jsonOptions);
 
         File.WriteAllText(filePath, data);
 
@@ -68,12 +82,16 @@ public class MainWindowModel
             }
             // Read data in again in someone changed it on disk
             data = File.ReadAllText(filePath);
-            users = JsonSerializer.Deserialize<List<User>>(data, jsonOptions) ?? new List<User>();
+            modelData = JsonSerializer.Deserialize<ModelData>(data, jsonOptions) ?? new ModelData();
+            users = modelData.users;
+            subjects = modelData.subjects;
         }
 
-        current_user = users.Find(user => current_user.username == iuser);
+        // current_user = users.Find(user => current_user.username == iuser);
+        current_user = users.Find(user => user.username == iuser);
 
-        if(user.password == ipass) {
+
+        if(current_user != null && current_user.password == ipass) {
             Console.WriteLine("Match");
             return 1;
         }
@@ -82,12 +100,24 @@ public class MainWindowModel
         return 0;
     }
 
-    public int create_subject (string iname, string idetails) {
-        if (current_user.GetType() != Teacher) return -1;
-        Subject subject = new Subject(iname, idetails, current_user.username);
-        Teacher current_teacher = (Teacher)current_user;
+    public int create_subject (string iname, string idetails, string iteacher) {
+        Teacher current_teacher = (Teacher)users.Find(user => user.username == iteacher);
+        if (current_teacher == null || current_teacher is not Teacher) return -1;
+
+        if (current_teacher.subjects == null) {
+            current_teacher.subjects = new List<Subject>();
+        }
+
+        Subject subject = new Subject(iname, idetails, current_teacher.username);
         current_teacher.subjects.Add(subject);
-        subject.Add(subject);
-        
+        subjects.Add(subject);
+
+        modelData.users = users;
+        modelData.subjects = subjects;
+        data = JsonSerializer.Serialize(modelData, jsonOptions);
+
+        File.WriteAllText(filePath, data);
+
+        return 0;        
     }
 }

@@ -11,14 +11,14 @@ public partial class MainWindowViewModel : ViewModelBase
     
     private MainWindowModel Model;
 
-    [ObservableProperty] public UserControl currentView;
-    private StudentView _studentView = new StudentView(){DataContext=new StudentViewModel()};
+    // [ObservableProperty] public UserControl currentView;
+    // private StudentView _studentView = new StudentView(){DataContext=new StudentViewModel()};
 
-    private Login _loginView = new Login(){DataContext=new LoginViewModel()};
+    // private Login _loginView = new Login(){DataContext=new LoginViewModel()};
     
     public MainWindowViewModel()
     {
-        /*
+        
         Model = new MainWindowModel(); // Instantiate the model
         Model.register("Bjarne", "apparatus1234", true); // isteacher = true
         Model.register("Fateme", "WHAAAT??", true);
@@ -26,16 +26,16 @@ public partial class MainWindowViewModel : ViewModelBase
         Model.register("Arturo", "pogacs4", false);
         Model.login("Bjarne", "apparatus1234");
         Model.login("Paride", "fakenews");
-        */
-        currentView = _loginView;
+        Model.create_subject("MATH1", "The best course you'll ever have", "Bjarne");
+        // currentView = _loginView;
         
     }
 
     
-    [RelayCommand]
-    public void ToStudentView()
-    {
-        currentView = _studentView;
-    }
+    // [RelayCommand]
+    // public void ToStudentView()
+    // {
+    //     currentView = _studentView;
+    // }
 
 }
