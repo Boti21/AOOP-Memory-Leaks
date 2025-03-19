@@ -13,6 +13,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty] public UserControl currentView;
     private StudentView _studentView = new StudentView(){DataContext=new StudentViewModel()};
+
+    private Login _loginView = new Login(){DataContext=new LoginViewModel()};
     
     public MainWindowViewModel()
     {
@@ -25,7 +27,7 @@ public partial class MainWindowViewModel : ViewModelBase
         Model.login("Bjarne", "apparatus1234");
         Model.login("Paride", "fakenews");
         */
-        currentView = _studentView;
+        currentView = _loginView;
         
     }
 

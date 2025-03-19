@@ -26,9 +26,29 @@ public class MainWindowModelTests : IDisposable
     {
         var Model = CreateModelInstance();
         
-        int result = Model.register("Bjarne", "apparatus1234");
+        int result = Model.register("Bjarne", "apparatus1234", true);
 
         Assert.Equal(1, result);
+    }
+
+    [Fact]
+    public void LoginUnexistingUser()
+    {
+        var Model = CreateModelInstance();
+
+        int result = Model.login("ShowThePainHarold", "pain");
+
+        Assert.Equal(-1, result);
+    }
+
+    [Fact]
+    public void LoginPasswordMismatch()
+    {
+        var Model = CreateModelInstance();
+
+        int result = Model.login("Bjarne", "apparatus4321");
+
+        Assert.Equal(0, result);
     }
 
     public void Dispose()
