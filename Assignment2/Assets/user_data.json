@@ -21,7 +21,7 @@
     },
     {
       "type": "teacher",
-      "subjects": null,
+      "subjects": [],
       "id": 0,
       "name": null,
       "username": "Fateme",
@@ -29,7 +29,18 @@
     },
     {
       "type": "student",
-      "enrolledSubjects": null,
+      "enrolledSubjects": [
+        {
+          "name": "MATH1",
+          "details": "The best course you\u0027ll ever have",
+          "teacher": "Bjarne"
+        },
+        {
+          "name": "MATH1",
+          "details": "The best course you\u0027ll ever have",
+          "teacher": "Bjarne"
+        }
+      ],
       "id": 0,
       "name": null,
       "username": "Balage",
@@ -37,7 +48,7 @@
     },
     {
       "type": "student",
-      "enrolledSubjects": null,
+      "enrolledSubjects": [],
       "id": 0,
       "name": null,
       "username": "Arturo",

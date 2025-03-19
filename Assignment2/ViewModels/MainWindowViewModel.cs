@@ -26,6 +26,10 @@ public partial class MainWindowViewModel : ViewModelBase
         Model.login("Bjarne", "apparatus1234");
         Model.login("Paride", "fakenews");
         Model.create_subject("MATH1", "The best course you'll ever have", "Bjarne");
+        Model.login("Balage", "triking1000");
+        Model.login("Balage", "tricking2000");
+        Model.enroll_subject("MATH3");
+        Model.enroll_subject("MATH1");
         // currentView = _loginView;
         
         
