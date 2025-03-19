@@ -12,6 +12,7 @@ public class ModelData {
     public List<User> users { get; set; }
     public List<Subject> subjects { get; set; }
 }
+
 public class MainWindowModel
 {
     private string filePath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Assets", "user_data.json");
@@ -21,6 +22,8 @@ public class MainWindowModel
     public List<Subject> subjects { get; set; }
     private ModelData modelData { get; set; }
 
+    public uint no_users;
+    public uint no_subjects;
 
     private static readonly JsonSerializerOptions jsonOptions = new() {
         WriteIndented = true, // Pretty-print JSON
@@ -30,17 +33,13 @@ public class MainWindowModel
 
     public MainWindowModel() {
         modelData = new ModelData();
+
         subjects = new List<Subject>();
         users = new List<User>();
         if (File.Exists(filePath)) {
-            data = File.ReadAllText(filePath);
-            if (!string.IsNullOrWhiteSpace(data)) {
-                modelData = JsonSerializer.Deserialize<ModelData>(data, jsonOptions) ?? new ModelData();
-                users = modelData.users;
-                subjects = modelData.subjects;
-            }
             fetch_data();
         }
+        
     }
     public int register (string iuser, string ipass, bool isteacher) {
 
@@ -58,8 +57,11 @@ public class MainWindowModel
 
         current_user = isteacher ? new Teacher() : new Student();
 
+        current_user.id = no_users;
+        no_users++;
         current_user.username = iuser;
         current_user.password = ipass;
+
         users.Add(current_user);
 
         push_data();
@@ -90,6 +92,10 @@ public class MainWindowModel
         return 0;
     }
 
+    public void logout () {
+        current_user = null;
+    }
+
     public int create_subject (string iname, string idetails, string iteacher) {
         fetch_data();
         Teacher current_teacher = (Teacher)users.Find(user => user.username == iteacher);
@@ -101,11 +107,13 @@ public class MainWindowModel
         }
 
         if (current_teacher.subjects == null) {
-            current_teacher.subjects = new List<Subject>();
+            current_teacher.subjects = new List<uint>();
         }
 
-        Subject subject = new Subject(iname, idetails, current_teacher.username);
-        current_teacher.subjects.Add(subject);
+        Subject subject = new Subject(iname, idetails, current_teacher.id);
+        subject.id = no_subjects;
+        no_subjects++;
+        current_teacher.subjects.Add(subject.id);
         subjects.Add(subject);
 
        push_data();
@@ -118,24 +126,16 @@ public class MainWindowModel
         current_user = users.Find(user => user.username == current_user.username);
         if (current_user == null || current_user is not Student) return -1;
         Subject isubject = subjects.Find(subject => subject.name == iname);
+
         if (isubject == null) {
             Console.WriteLine("No such subject");
             return -1;
         }
-        Console.WriteLine("Existing subjects:");
-        foreach (var subject in subjects)
-        {
-            Console.WriteLine($"- '{subject.name}'");
-        }
-        Console.WriteLine($"Input: '{iname}' (Length: {iname.Length})");
-        foreach (var subject in subjects)
-        {
-            Console.WriteLine($"Stored: '{subject.name}' (Length: {subject.name.Length})");
-            Console.WriteLine("Bytes: " + BitConverter.ToString(Encoding.UTF8.GetBytes(subject.name)));
-        }
+
         Student current_student = (Student)current_user;
-        if (current_student.enrolledSubjects == null) current_student.enrolledSubjects = new List<Subject>();
-        current_student.enrolledSubjects.Add(isubject);
+        isubject.studentsEnrolled.Add(current_student.id);
+        if (current_student.enrolledSubjects == null) current_student.enrolledSubjects = new List<uint>();
+        current_student.enrolledSubjects.Add(isubject.id);
 
         push_data();
 
@@ -148,6 +148,8 @@ public class MainWindowModel
             modelData = JsonSerializer.Deserialize<ModelData>(data, jsonOptions) ?? new ModelData();
             users = modelData.users;
             subjects = modelData.subjects;
+            no_users = (uint)modelData.users.Count;
+            no_subjects = (uint)modelData.subjects.Count;
         } 
     }
 
