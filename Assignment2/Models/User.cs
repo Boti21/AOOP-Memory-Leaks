@@ -7,10 +7,9 @@ using System.Text.Json.Serialization;
 [JsonDerivedType(typeof(Student), "student")]
 
 public abstract class User {
-    public int id { get; set; }
+    public uint id { get; set; }
     public string name { get; set; }
     public string username { get; set; }
     public string password { get; set; }
-    // public abstract bool isteacher { get; }
 
 }
