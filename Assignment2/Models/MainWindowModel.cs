@@ -25,6 +25,9 @@ public class MainWindowModel
     public uint no_users;
     public uint no_subjects;
 
+    public bool IsStudent => current_user is Student;
+    public bool IsTeacher => current_user is Teacher;
+
 
     private static readonly JsonSerializerOptions jsonOptions = new() {
         WriteIndented = true, // Pretty-print JSON

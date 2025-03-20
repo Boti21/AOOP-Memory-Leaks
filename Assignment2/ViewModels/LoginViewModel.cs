@@ -7,6 +7,7 @@ namespace Assignment2.ViewModels;
 public class LoginViewModel : ViewModelBase
 {
     private readonly MainWindowModel _model;
+    private readonly MainWindowViewModel _viewModel;
 
     private string _username;
     private string _password;
@@ -25,11 +26,34 @@ public class LoginViewModel : ViewModelBase
     public IRelayCommand LoginCommand { get; }
     public IRelayCommand RegisterCommand { get; }
 
-    public LoginViewModel()
+    public LoginViewModel(MainWindowViewModel viewModel)
     {
         _model = new MainWindowModel();
+        _viewModel = viewModel;
 
-        LoginCommand = new RelayCommand(() => _model.login(username, password));
+        LoginCommand = new RelayCommand(async () => await LoginAndUpdateView());
         RegisterCommand = new RelayCommand(() => _model.register(username, password, false));
+    }
+
+    public async Task LoginAndUpdateView()
+    {
+        bool loginSuccessful = _model.login(username, password) == 1;
+
+        if (loginSuccessful)
+        {
+            if (_model.IsStudent)
+            {
+                _viewModel.CurrentView = _viewModel.StudentView;
+                Console.WriteLine("Student");
+            }
+            else if (_model.IsTeacher)
+            {
+                Console.WriteLine("Teacher");
+            }
+            else
+            {
+                Console.WriteLine("Cannot find type of User");
+            }
+        }
     }
 }
