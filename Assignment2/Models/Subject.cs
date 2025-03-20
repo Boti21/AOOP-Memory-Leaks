@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Assignment2.Models;
 
@@ -9,6 +10,7 @@ public class Subject {
     public string details { get; set; }
     public uint teacher { get; set; }
     public List<uint> studentsEnrolled { get; set; }
+
 
     public Subject() {}
 

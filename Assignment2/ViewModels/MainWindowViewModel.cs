@@ -1,4 +1,5 @@
-﻿using Assignment2.Models;
+﻿using System.Collections.ObjectModel;
+using Assignment2.Models;
 using Assignment2.Views;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -9,7 +10,14 @@ namespace Assignment2.ViewModels;
 public partial class MainWindowViewModel : ViewModelBase
 {
     [ObservableProperty]
-    public MainWindowModel model;
+    private MainWindowModel model;
+    
+    // If student then enrolled subjects
+    private List<Subject> _studentsEnrolled;
+
+    public List<Subject> studentsNotEnrolled { get; set; }
+    
+    public List<Subject> teachersTeaching { get; set; }
 
     [ObservableProperty] public UserControl currentView;
     private LoginView _loginView;
@@ -17,12 +25,23 @@ public partial class MainWindowViewModel : ViewModelBase
     public StudentView StudentView { get; private set; }
     public TeacherView TeacherView { get; private set; }
     
+    // Enroll textbox
+    [ObservableProperty]
+    private string enrollTextBox;
+    
+    
+    
+    // Wrapper for Enroll button
+    public void EnrollButton()
+    {
+        model.enroll_subject(enrollTextBox);
+    }
+    
     public MainWindowViewModel()
     {
         model = new MainWindowModel(); // Instantiate the model
 
         var loginViewModel = new LoginViewModel(this);
-        //var mainWindowVM = new MainWindowViewModel();
         _loginView = new LoginView() { DataContext = loginViewModel };
 
         StudentView = new StudentView() { DataContext =  this };
@@ -47,8 +66,10 @@ public partial class MainWindowViewModel : ViewModelBase
         Model.drop_subject("Dynamics");
         */
         currentView = _loginView;
-        
-        
+
+
+        _studentsEnrolled = model.studentEnrolledSubjects;
+        _studentsEnrolled.Add(new Subject("Example of how this should work", "but it doesn't, and we don't know why and we also do not have time to fix it", 0));
     }
 
     

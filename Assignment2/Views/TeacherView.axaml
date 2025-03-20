@@ -9,7 +9,45 @@
     
     <TabControl Margin="5">
         <TabItem Header="My Subjects" >
+            <ListBox Name="EnrolledSubjectsList" ItemsSource="">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="LightGray" BorderBrush="Black" BorderThickness="1" Padding="5" CornerRadius="5">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Enroll" Command="{Binding  }" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Stretch"></Button>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="" Padding="50, 0, 0, 0"/>
+                                    <TextBlock Text="" Padding="50, 0, 0, 0"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </TabItem>
-        <TabItem Header="Available Subjects"></TabItem>
+        <TabItem Header="Available Subjects" >
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBox Text="{Binding EnrollTextBox}"/>
+                    <Button Content="Enroll" Command="{Binding EnrollButton}"></Button>
+                </StackPanel>
+            <ListBox Name="AvailableSubjectsList" ItemsSource="{Binding Model.subjects}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="LightGray" BorderBrush="Black" BorderThickness="1" Padding="5" CornerRadius="5">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Enroll" Command="{Binding  }" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Stretch"></Button>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="{Binding name}" Padding="50, 0, 0, 0"/>
+                                    <TextBlock Text="{Binding details}" Padding="50, 0, 0, 0"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+                
+            </StackPanel>
+        </TabItem>
     </TabControl>
 </UserControl>

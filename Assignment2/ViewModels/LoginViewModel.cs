@@ -74,6 +74,7 @@ public class LoginViewModel : ViewModelBase
             {
                 _viewModel.CurrentView = _viewModel.StudentView;
                 Console.WriteLine("Student");
+                
             }
             else if (_model.IsTeacher)
             {

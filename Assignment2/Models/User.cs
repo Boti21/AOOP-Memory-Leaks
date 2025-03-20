@@ -1,3 +1,5 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+
 namespace Assignment2.Models;
 
 using System.Text.Json.Serialization;

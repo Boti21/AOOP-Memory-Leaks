@@ -4,13 +4,17 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace Assignment2.Models;
 
 
-public class MainWindowModel
+public partial class MainWindowModel : ObservableObject
 {
     private string filePath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Assets", "user_data.json");
     private string data { get; set; }
@@ -21,7 +25,10 @@ public class MainWindowModel
     private User current_user { get; set; }
     public List<User> users { get; set; }
     public List<Subject> subjects { get; set; }
-    public List<Subject> studentEnrolledSubjects { get; set; }
+
+
+    public List<Subject> studentEnrolledSubjects {set; get;}
+    
     public List<Subject> studentNotEnrolledSubjects { get; set; }
     private ModelData modelData { get; set; }
 
@@ -42,6 +49,8 @@ public class MainWindowModel
         modelData = new ModelData();
         subjects = new List<Subject>();
         users = new List<User>();
+        
+        studentEnrolledSubjects = new List<Subject>();
 
         if (File.Exists(filePath)) {
             fetch_data();
@@ -76,6 +85,25 @@ public class MainWindowModel
         return 0;
     }
 
+    // Pass in subject ID list to get subject object list out
+    public List<Subject> getSubjects(List<uint> subjectIds)
+    {
+        var _subjects = new List<Subject>();
+
+        foreach (var sub in subjects)
+        {
+            foreach (var id in subjectIds)
+            {
+                if (id == sub.id)
+                {
+                    _subjects.Add(sub);
+                }
+            }
+        }
+        
+        return _subjects;
+    }
+
     public void logout () {
         current_user = null;
     }
@@ -90,43 +118,30 @@ public class MainWindowModel
             // Read data in again in someone changed it on disk
             fetch_data();
         }
+        
+        
 
         var tmp = current_user;
         current_user = users.Find(user => user.username == iuser);
+        
 
         if(current_user != null && 
            current_user.password == ipass && 
            current_user.GetType() == (isteacher ? typeof(Teacher) : typeof(Student))) {
             
-            studentEnrolledSubjects = new List<Subject>();
             if (current_user.GetType() == typeof(Student))
             {
                 Student current_student = (Student)current_user;
-                studentEnrolledSubjects = current_student.displayedSubjects;
-                foreach (Subject subject in subjects)
+                var temp_student = (Student)current_user;
+                if (temp_student.displayedSubjects == null) temp_student.displayedSubjects = new List<Subject>();
+
+                current_user.displayedSubjects = getSubjects(temp_student.enrolledSubjects);
+                studentEnrolledSubjects = new List<Subject>();
+                foreach (var sub in current_user.displayedSubjects)
                 {
-                    if (subject == null)
-                    {
-                        continue;
-                    }
-                    bool studentIsEnrolled = false;
-                    foreach (uint id in subject.studentsEnrolled)
-                    {
-                        if (id == current_student.id)
-                        {
-                            studentIsEnrolled = true;
-                        }
-                    }
-                    if (!studentIsEnrolled)
-                    {
-                        if (subject != null)
-                        {
-                            Console.WriteLine("hello");
-                            studentNotEnrolledSubjects.Add(subject);
-                        }
-                            Console.WriteLine("world");
-                    }
+                    studentEnrolledSubjects.Add(sub);
                 }
+                //studentEnrolledSubjects = current_student.displayedSubjects;
             } else if (current_user.GetType() == typeof(Teacher))
             {
                 Teacher current_teacher = (Teacher)current_user;
@@ -195,6 +210,8 @@ public class MainWindowModel
 
         return 0;
     }
+    
+
 
     public int delete_subject (string iname) {
         fetch_data();
@@ -274,6 +291,8 @@ public class MainWindowModel
             no_subjects = (uint)modelData.subjects.Count;
         } 
         current_user = tmp;
+        
+        
     }
  
     private void push_data () {

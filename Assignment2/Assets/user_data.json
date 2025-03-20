@@ -18,7 +18,7 @@
     },
     {
       "type": "student",
-      "enrolledSubjects": [],
+      "enrolledSubjects": [1],
       "id": 2,
       "name": null,
       "username": "Balage",
@@ -31,30 +31,6 @@
       "name": null,
       "username": "Arturo",
       "password": "pogacs4"
-    },
-    {
-      "type": "teacher",
-      "subjects": [],
-      "id": 4,
-      "name": null,
-      "username": "hello",
-      "password": "world"
-    },
-    {
-      "type": "teacher",
-      "subjects": [],
-      "id": 5,
-      "name": null,
-      "username": "asdf",
-      "password": "asdf"
-    },
-    {
-      "type": "teacher",
-      "subjects": [],
-      "id": 6,
-      "name": null,
-      "username": "hello ",
-      "password": "world"
     }
   ],
   "subjects": [
