@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Assignment2.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Assignment2.Views.LoginView">
+             x:Class="Assignment2.Views.LoginView"
              x:DataType="vm:LoginViewModel">
              
     <Border Background="LightGray">

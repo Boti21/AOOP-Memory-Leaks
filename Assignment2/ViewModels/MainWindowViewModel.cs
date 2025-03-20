@@ -12,7 +12,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private MainWindowModel Model;
 
     [ObservableProperty] public UserControl currentView;
-    private Login _loginView;
+    private LoginView _loginView;
 
     public StudentView StudentView { get; private set; }
     
@@ -21,7 +21,7 @@ public partial class MainWindowViewModel : ViewModelBase
         Model = new MainWindowModel(); // Instantiate the model
 
         var loginViewModel = new LoginViewModel(this);
-        _loginView = new Login() { DataContext = loginViewModel };
+        _loginView = new LoginView() { DataContext = loginViewModel };
 
         StudentView = new StudentView() { DataContext = new StudentViewModel() };
         /*
