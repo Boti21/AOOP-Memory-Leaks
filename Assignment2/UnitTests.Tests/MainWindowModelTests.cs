@@ -51,6 +51,55 @@ public class MainWindowModelTests : IDisposable
         Assert.Equal(0, result);
     }
 
+    [Fact]
+    public void CreateSubjectAlreadyExists()
+    {
+        var Model = CreateModelInstance();
+
+        int result = Model.create_subject("Dynamics", "The other best course", "Bjarne");
+
+        Assert.Equal(-1, result);
+    }
+
+    [Fact]
+    public void DeleteSubjectAsStudent()
+    {
+        var Model = CreateModelInstance();
+        
+        Model.login("Balage", "tricking2000");
+
+        int result = Model.delete_subject("Dynamics");
+
+        Model.logout();
+
+        Assert.Equal(-1, result);
+    }
+
+    [Fact]
+    public void EnrollUnexistingSubject()
+    {
+        var Model = CreateModelInstance();
+
+        Model.login("Balage", "tricking2000");
+
+        int result = Model.enroll_subject("MATH3");
+
+        Assert.Equal(-1, result);
+    }
+
+    [Fact]
+
+    public void DropSubjectAsTeacher()
+    {
+        var Model = CreateModelInstance();
+
+        Model.login("Bjarne", "apparatus1234");
+
+        int result = Model.drop_subject("MATH1");
+
+        Assert.Equal(-1, result);
+    }
+
     public void Dispose()
     {
         if (File.Exists(testFilePath))

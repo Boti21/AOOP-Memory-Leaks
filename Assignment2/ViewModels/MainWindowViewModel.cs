@@ -12,14 +12,19 @@ public partial class MainWindowViewModel : ViewModelBase
     private MainWindowModel Model;
 
     [ObservableProperty] public UserControl currentView;
-    
-    private StudentView _studentView = new StudentView(){DataContext=new StudentViewModel()};
+    private Login _loginView;
 
-    private LoginView _loginView = new LoginView(){DataContext=new LoginViewModel()};
+    public StudentView StudentView { get; private set; }
     
     public MainWindowViewModel()
     {
         Model = new MainWindowModel(); // Instantiate the model
+
+        var loginViewModel = new LoginViewModel(this);
+        _loginView = new Login() { DataContext = loginViewModel };
+
+        StudentView = new StudentView() { DataContext = new StudentViewModel() };
+        /*
         Model.register("Bjarne", "apparatus1234", true); // isteacher = true
         Model.register("Fateme", "WHAAAT??", true);
         Model.register("Balage", "tricking2000", false);
@@ -37,16 +42,25 @@ public partial class MainWindowViewModel : ViewModelBase
         Model.login("Arturo", "pogacs4");
         Model.enroll_subject("Dynamics");
         Model.drop_subject("Dynamics");
-        // currentView = _loginView;
+        */
+        currentView = _loginView;
         
         
     }
 
     
+    [RelayCommand]
+    public void ToStudentView()
+    {
+        currentView = StudentView;
+    }
+
     // [RelayCommand]
-    // public void ToStudentView()
+    // public void ToTeacherView()
     // {
-    //     currentView = _studentView;
+    //     private TeacherView _teacherView = new TeacherView(){DataContext= new TeacherViewModel()};
+
+    //     currentView = _teacherView;
     // }
 
 }
