@@ -4,6 +4,12 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Assignment2.ViewModels;
 
+public enum UserType
+{
+    Student,
+    Teacher
+}
+
 public class LoginViewModel : ViewModelBase
 {
     private readonly MainWindowModel _model;
@@ -23,6 +29,14 @@ public class LoginViewModel : ViewModelBase
         set => SetProperty(ref _password, value);
     }
 
+    private UserType _currentUserType;
+
+    public UserType CurrentUserType
+    {
+        get => _currentUserType;
+        set => SetProperty(ref _currentUserType, value);
+    }
+
     public IRelayCommand LoginCommand { get; }
     public IRelayCommand RegisterCommand { get; }
 
@@ -32,7 +46,7 @@ public class LoginViewModel : ViewModelBase
         _viewModel = viewModel;
 
         LoginCommand = new RelayCommand(async () => await LoginAndUpdateView());
-        RegisterCommand = new RelayCommand(() => _model.register(username, password, false));
+        RegisterCommand = new RelayCommand(() => Register());
     }
 
     public async Task LoginAndUpdateView()
@@ -43,7 +57,7 @@ public class LoginViewModel : ViewModelBase
         {
             if (_model.IsStudent)
             {
-                _viewModel.CurrentView = _viewModel.StudentView;
+                //_viewModel.CurrentView = _viewModel.StudentView;
                 Console.WriteLine("Student");
             }
             else if (_model.IsTeacher)
@@ -55,5 +69,13 @@ public class LoginViewModel : ViewModelBase
                 Console.WriteLine("Cannot find type of User");
             }
         }
+    }
+
+    public void Register()
+    {
+        Console.WriteLine(CurrentUserType);
+        CurrentUserType = UserType.Teacher;
+        bool IsTeacher = CurrentUserType == UserType.Teacher;
+        _model.register(username, password, IsTeacher);
     }
 }
