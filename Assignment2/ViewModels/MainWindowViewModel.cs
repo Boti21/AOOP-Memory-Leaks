@@ -11,10 +11,10 @@ public partial class MainWindowViewModel : ViewModelBase
     
     private MainWindowModel Model;
 
-    // [ObservableProperty] public UserControl currentView;
-    // private StudentView _studentView = new StudentView(){DataContext=new StudentViewModel()};
+    [ObservableProperty] public UserControl currentView;
+    private StudentView _studentView = new StudentView(){DataContext=new StudentViewModel()};
 
-    // private Login _loginView = new Login(){DataContext=new LoginViewModel()};
+    private Login _loginView = new Login(){DataContext=new LoginViewModel()};
     
     public MainWindowViewModel()
     {
@@ -36,16 +36,16 @@ public partial class MainWindowViewModel : ViewModelBase
         Model.login("Arturo", "pogacs4");
         Model.enroll_subject("Dynamics");
         Model.drop_subject("Dynamics");
-        // currentView = _loginView;
+        currentView = _loginView;
         
         
     }
 
     
-    // [RelayCommand]
-    // public void ToStudentView()
-    // {
-    //     currentView = _studentView;
-    // }
+    [RelayCommand]
+    public void ToStudentView()
+    {
+        currentView = _studentView;
+    }
 
 }
