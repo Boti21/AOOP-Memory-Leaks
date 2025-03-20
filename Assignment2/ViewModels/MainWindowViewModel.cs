@@ -11,10 +11,11 @@ public partial class MainWindowViewModel : ViewModelBase
     
     private MainWindowModel Model;
 
-    // [ObservableProperty] public UserControl currentView;
-    // private StudentView _studentView = new StudentView(){DataContext=new StudentViewModel()};
+    [ObservableProperty] public UserControl currentView;
+    
+    private StudentView _studentView = new StudentView(){DataContext=new StudentViewModel()};
 
-    // private Login _loginView = new Login(){DataContext=new LoginViewModel()};
+    private LoginView _loginView = new LoginView(){DataContext=new LoginViewModel()};
     
     public MainWindowViewModel()
     {
