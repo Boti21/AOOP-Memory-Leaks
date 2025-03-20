@@ -4,21 +4,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:Assignment2.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Assignment2.Views.StudentView" 
+             x:Class="Assignment2.Views.TeacherView"
              x:DataType="vm:MainWindowViewModel">
-            
     
     <TabControl Margin="5">
-        <TabItem Header="Enrolled Subjects" >
-            <ListBox Name="EnrolledSubjectsList" ItemsSource="{Binding Model.studentEnrolledSubjects}">
+        <TabItem Header="My Subjects" >
+            <ListBox Name="EnrolledSubjectsList" ItemsSource="">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Border Background="LightGray" BorderBrush="Black" BorderThickness="1" Padding="5" CornerRadius="5">
                             <StackPanel Orientation="Horizontal">
                                 <Button Content="Enroll" Command="{Binding  }" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Stretch"></Button>
                                 <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="{Binding name}" Padding="50, 0, 0, 0"/>
-                                    <TextBlock Text="{Binding details}" Padding="50, 0, 0, 0"/>
+                                    <TextBlock Text="" Padding="50, 0, 0, 0"/>
+                                    <TextBlock Text="" Padding="50, 0, 0, 0"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>

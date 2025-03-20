@@ -1,4 +1,5 @@
 ﻿using Assignment2.Models;
+using Assignment2.ViewModels;
 
 namespace UnitTests.Tests;
 
@@ -36,7 +37,7 @@ public class MainWindowModelTests : IDisposable
     {
         var Model = CreateModelInstance();
 
-        int result = Model.login("ShowThePainHarold", "pain");
+        int result = Model.login("ShowThePainHarold", "pain", false);
 
         Assert.Equal(-1, result);
     }
@@ -46,7 +47,7 @@ public class MainWindowModelTests : IDisposable
     {
         var Model = CreateModelInstance();
 
-        int result = Model.login("Bjarne", "apparatus4321");
+        int result = Model.login("Bjarne", "apparatus4321", true);
 
         Assert.Equal(0, result);
     }
@@ -66,7 +67,7 @@ public class MainWindowModelTests : IDisposable
     {
         var Model = CreateModelInstance();
         
-        Model.login("Balage", "tricking2000");
+        Model.login("Balage", "tricking2000", false);
 
         int result = Model.delete_subject("Dynamics");
 
@@ -80,7 +81,7 @@ public class MainWindowModelTests : IDisposable
     {
         var Model = CreateModelInstance();
 
-        Model.login("Balage", "tricking2000");
+        Model.login("Balage", "tricking2000", false);
 
         int result = Model.enroll_subject("MATH3");
 
@@ -93,7 +94,7 @@ public class MainWindowModelTests : IDisposable
     {
         var Model = CreateModelInstance();
 
-        Model.login("Bjarne", "apparatus1234");
+        Model.login("Bjarne", "apparatus1234", true);
 
         int result = Model.drop_subject("MATH1");
 

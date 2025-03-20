@@ -29,8 +29,9 @@ public class LoginViewModel : ViewModelBase
         set => SetProperty(ref _password, value);
     }
 
+    public bool teacherChecked { get; set; }
+    public bool studentChecked { get; set; }
     private UserType _currentUserType;
-
     public UserType CurrentUserType
     {
         get => _currentUserType;
@@ -45,23 +46,39 @@ public class LoginViewModel : ViewModelBase
         _model = new MainWindowModel();
         _viewModel = viewModel;
 
+        // Setting default state of radio buttons
+        teacherChecked = true;
+        studentChecked = false;
+
         LoginCommand = new RelayCommand(async () => await LoginAndUpdateView());
         RegisterCommand = new RelayCommand(() => Register());
     }
 
     public async Task LoginAndUpdateView()
     {
-        bool loginSuccessful = _model.login(username, password) == 1;
+        if (teacherChecked == true && studentChecked == false)
+        {
+            CurrentUserType = UserType.Teacher;
+        }
+        else if (teacherChecked == false && studentChecked == true)
+        {
+            CurrentUserType = UserType.Student;
+        }
+        
+        bool isteacher = _currentUserType == UserType.Teacher ? true : false;
+        bool loginSuccessful = username == null ? false : (password == null ? false : (_model.login(username, password, isteacher) == 1));
 
         if (loginSuccessful)
         {
             if (_model.IsStudent)
             {
-                //_viewModel.CurrentView = _viewModel.StudentView;
+                _viewModel.CurrentView = _viewModel.StudentView;
                 Console.WriteLine("Student");
+                
             }
             else if (_model.IsTeacher)
             {
+                _viewModel.CurrentView = _viewModel.TeacherView;
                 Console.WriteLine("Teacher");
             }
             else

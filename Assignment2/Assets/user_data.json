@@ -18,7 +18,7 @@
     },
     {
       "type": "student",
-      "enrolledSubjects": [],
+      "enrolledSubjects": [1],
       "id": 2,
       "name": null,
       "username": "Balage",
@@ -39,7 +39,21 @@
       "id": 1,
       "details": "The other best course",
       "teacher": 0,
-      "studentsEnrolled": []
+      "studentsEnrolled": [2]
+    },
+    {
+      "name": "AOOP",
+      "id": 2,
+      "details": "The best course",
+      "teacher": 1,
+      "studentsEnrolled": [2]
+    },
+    {
+      "name": "Statics",
+      "id": 3,
+      "details": "Not the best",
+      "teacher": 3,
+      "studentsEnrolled": [3]
     }
   ]
 }
