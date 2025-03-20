@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using System.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Assignment2.Models;
 
@@ -14,12 +15,14 @@ public class MainWindowModel
     private string filePath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Assets", "user_data.json");
     private string data { get; set; }
     public class ModelData {
-    public List<User> users { get; set; }
-    public List<Subject> subjects { get; set; }
- }
+        public List<User> users { get; set; }
+        public List<Subject> subjects { get; set; }
+    }
     private User current_user { get; set; }
     public List<User> users { get; set; }
     public List<Subject> subjects { get; set; }
+    public List<Subject> studentEnrolledSubjects { get; set; }
+    public List<Subject> studentNotEnrolledSubjects { get; set; }
     private ModelData modelData { get; set; }
 
     public uint no_users;
@@ -44,6 +47,7 @@ public class MainWindowModel
             fetch_data();
         }
     }
+    
     public int register (string iuser, string ipass, bool isteacher) {
 
         if (File.Exists(filePath)) {
@@ -76,7 +80,7 @@ public class MainWindowModel
         current_user = null;
     }
 
-    public int login (string iuser, string ipass) {
+    public int login (string iuser, string ipass, bool isteacher) {
 
         if (File.Exists(filePath)) {
             if(!File.ReadAllText(filePath).Contains(iuser)) {
@@ -87,13 +91,53 @@ public class MainWindowModel
             fetch_data();
         }
 
+        var tmp = current_user;
         current_user = users.Find(user => user.username == iuser);
 
-        if(current_user != null && current_user.password == ipass) {
+        if(current_user != null && 
+           current_user.password == ipass && 
+           current_user.GetType() == (isteacher ? typeof(Teacher) : typeof(Student))) {
+            
+            studentEnrolledSubjects = new List<Subject>();
+            if (current_user.GetType() == typeof(Student))
+            {
+                Student current_student = (Student)current_user;
+                studentEnrolledSubjects = current_student.displayedSubjects;
+                foreach (Subject subject in subjects)
+                {
+                    if (subject == null)
+                    {
+                        continue;
+                    }
+                    bool studentIsEnrolled = false;
+                    foreach (uint id in subject.studentsEnrolled)
+                    {
+                        if (id == current_student.id)
+                        {
+                            studentIsEnrolled = true;
+                        }
+                    }
+                    if (!studentIsEnrolled)
+                    {
+                        if (subject != null)
+                        {
+                            Console.WriteLine("hello");
+                            studentNotEnrolledSubjects.Add(subject);
+                        }
+                            Console.WriteLine("world");
+                    }
+                }
+            } else if (current_user.GetType() == typeof(Teacher))
+            {
+                Teacher current_teacher = (Teacher)current_user;
+            }
+            
             Console.WriteLine("Match");
             return 1;
         }
 
+        current_user = tmp;
+        
         Console.WriteLine("Incorrect Password");
         return 0;
     }
@@ -142,8 +186,10 @@ public class MainWindowModel
         }
         isubject.studentsEnrolled.Add(current_student.id);
         if (current_student.enrolledSubjects == null) current_student.enrolledSubjects = new List<uint>();
+        if (current_student.displayedSubjects == null) current_student.displayedSubjects = new List<Subject>();
 
         current_student.enrolledSubjects.Add(isubject.id);
+        current_student.displayedSubjects.Add(isubject);
 
         push_data();
 
@@ -204,6 +250,7 @@ public class MainWindowModel
         }
 
         current_student.enrolledSubjects.Remove(rsubject.id);
+        current_student.displayedSubjects.Remove(rsubject);
         rsubject.studentsEnrolled.Remove(current_student.id);
 
         push_data();

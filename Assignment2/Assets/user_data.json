@@ -31,6 +31,30 @@
       "name": null,
       "username": "Arturo",
       "password": "pogacs4"
+    },
+    {
+      "type": "teacher",
+      "subjects": [],
+      "id": 4,
+      "name": null,
+      "username": "hello",
+      "password": "world"
+    },
+    {
+      "type": "teacher",
+      "subjects": [],
+      "id": 5,
+      "name": null,
+      "username": "asdf",
+      "password": "asdf"
+    },
+    {
+      "type": "teacher",
+      "subjects": [],
+      "id": 6,
+      "name": null,
+      "username": "hello ",
+      "password": "world"
     }
   ],
   "subjects": [
@@ -39,7 +63,21 @@
       "id": 1,
       "details": "The other best course",
       "teacher": 0,
-      "studentsEnrolled": []
+      "studentsEnrolled": [2]
+    },
+    {
+      "name": "AOOP",
+      "id": 2,
+      "details": "The best course",
+      "teacher": 1,
+      "studentsEnrolled": [2]
+    },
+    {
+      "name": "Statics",
+      "id": 3,
+      "details": "Not the best",
+      "teacher": 3,
+      "studentsEnrolled": [3]
     }
   ]
 }

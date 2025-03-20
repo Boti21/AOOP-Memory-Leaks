@@ -5,18 +5,15 @@
              xmlns:vm="using:Assignment2.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Assignment2.Views.StudentView" 
-             x:DataType="vm:StudentViewModel">
+             x:DataType="vm:MainWindowViewModel">
             
     
     <TabControl Margin="5">
-        <TabItem Header="Setup">
-            <Button Content="Instantiate stuff"/>
-        </TabItem>
         <TabItem Header="Enrolled Subjects" >
-            <ListBox Name="EnrolledSubjectsList" ItemsSource="{Binding Subjects}">
+            <ListBox Name="EnrolledSubjectsList" ItemsSource="{Binding Model.studentEnrolledSubjects}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Border Background="Azure" BorderBrush="Black" BorderThickness="5" CornerRadius="5">
+                        <Border Background="LightGray" BorderBrush="Black" BorderThickness="2" CornerRadius="5">
                             <StackPanel>
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock Text="{Binding name}"/>
@@ -29,6 +26,24 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </TabItem>
-        <TabItem Header="Available Subjects"></TabItem>
+        <TabItem Header="Available Subjects" >
+            <ListBox Name="AvailableSubjectsList" ItemsSource="{Binding Model.studentNotEnrolledSubjects}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="Azure" BorderBrush="Black" BorderThickness="5" CornerRadius="5">
+                            <StackPanel>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text=""/>
+                                    <TextBlock Text=""/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="Enroll" ></Button>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </TabItem>
     </TabControl>
 </UserControl>

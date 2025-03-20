@@ -12,13 +12,13 @@
                 BorderThickness="3"
                 CornerRadius="20"
                 Background="White"
-                Padding="30"
-                Margin="270, 40">
+                Height="410"
+                Width="280">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock Text="Choose type of account:" FontWeight="DemiBold"/>
                 <ListBox Background="White">
-                    <RadioButton Content="Teacher" IsChecked="{Binding CurrentUserType, Mode=TwoWay}"/>
-                    <RadioButton Content="Student" IsChecked="{Binding CurrentUserType, Mode=TwoWay}"/>
+                    <RadioButton GroupName="UserTypeToggle" Content="Teacher" IsChecked="{Binding teacherChecked, Mode=TwoWay}"/>
+                    <RadioButton GroupName="UserTypeToggle" Content="Student" IsChecked="{Binding studentChecked, Mode=TwoWay}"/>
                 </ListBox>
                 <TextBlock Text="Username:" FontWeight="DemiBold" Padding="0, 10, 0, 5"/>
                 <TextBox Text="{Binding username}"></TextBox>

@@ -8,19 +8,20 @@ namespace Assignment2.ViewModels;
 public partial class StudentViewModel : ViewModelBase
 {
     [ObservableProperty]
-    public List<Subject> subjects = new List<Subject>();
+    public List<Subject> enrolledSubjects = new List<Subject>();
+    
+    
 
     public StudentViewModel()
     {
         Subject temp_subject = new Subject("asd", "foo", 0);
-        subjects.Add(temp_subject);
+        enrolledSubjects.Add(temp_subject);
     }
 
     [RelayCommand]
     public void setup()
     {
         Subject temp_subject = new Subject("asd", "foo", 0);
-        subjects.Add(temp_subject);
+        enrolledSubjects.Add(temp_subject);
     }
-    
 }

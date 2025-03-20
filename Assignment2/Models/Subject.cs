@@ -13,9 +13,9 @@ public class Subject {
     public Subject() {}
 
     public Subject(string iname, string idetails, uint iteacher) {
-        this.name = iname;
-        this.details = idetails;
-        this.teacher = iteacher;
+        name = iname;
+        details = idetails;
+        teacher = iteacher;
         studentsEnrolled = new List<uint>();
     }
 }

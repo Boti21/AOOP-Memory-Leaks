@@ -8,22 +8,25 @@ namespace Assignment2.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    
-    private MainWindowModel Model;
+    [ObservableProperty]
+    public MainWindowModel model;
 
     [ObservableProperty] public UserControl currentView;
     private LoginView _loginView;
 
     public StudentView StudentView { get; private set; }
+    public TeacherView TeacherView { get; private set; }
     
     public MainWindowViewModel()
     {
-        Model = new MainWindowModel(); // Instantiate the model
+        model = new MainWindowModel(); // Instantiate the model
 
         var loginViewModel = new LoginViewModel(this);
+        //var mainWindowVM = new MainWindowViewModel();
         _loginView = new LoginView() { DataContext = loginViewModel };
 
-        StudentView = new StudentView() { DataContext = new StudentViewModel() };
+        StudentView = new StudentView() { DataContext =  this };
+        TeacherView = new TeacherView() { DataContext = this };
         /*
         Model.register("Bjarne", "apparatus1234", true); // isteacher = true
         Model.register("Fateme", "WHAAAT??", true);
@@ -55,12 +58,13 @@ public partial class MainWindowViewModel : ViewModelBase
         currentView = StudentView;
     }
 
-    // [RelayCommand]
-    // public void ToTeacherView()
-    // {
-    //     private TeacherView _teacherView = new TeacherView(){DataContext= new TeacherViewModel()};
-
-    //     currentView = _teacherView;
-    // }
+    [RelayCommand]
+    public void ToTeacherView()
+    {
+        //private TeacherView _teacherView = new TeacherView(){DataContext= new TeacherViewModel()};
+        currentView = TeacherView;
+    }
+    /*
+    */
 
 }
