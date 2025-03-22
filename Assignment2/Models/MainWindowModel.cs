@@ -19,7 +19,7 @@ public class MainWindowModel
 {
     private string filePath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Assets", "user_data.json");
     private string data { get; set; }
-    private User current_user { get; set; }
+    public User current_user { get; set; }
     public List<User> users { get; set; }
     public List<Subject> subjects { get; set; }
     private ModelData modelData { get; set; }
@@ -30,7 +30,8 @@ public class MainWindowModel
     private static readonly JsonSerializerOptions jsonOptions = new() {
         WriteIndented = true, // Pretty-print JSON
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        IncludeFields = true
+        IncludeFields = true,
+        ReferenceHandler = ReferenceHandler.Preserve
     };
 
     public MainWindowModel() {
@@ -110,13 +111,13 @@ public class MainWindowModel
         }
 
         if (current_teacher.subjects == null) {
-            current_teacher.subjects = new List<uint>();
+            current_teacher.subjects = new List<Subject>();
         }
 
         Subject subject = new Subject(iname, idetails, current_teacher.id);
         subject.id = no_subjects;
         no_subjects++;
-        current_teacher.subjects.Add(subject.id);
+        current_teacher.subjects.Add(subject);
         subjects.Add(subject);
 
        push_data();
@@ -130,24 +131,30 @@ public class MainWindowModel
         if (current_user == null || current_user is not Student) return -1;
         Subject isubject = subjects.Find(subject => subject.name == iname);
 
+
         if (isubject == null) {
             Console.WriteLine("No such subject");
             return -1;
         }
 
         Student current_student = (Student)current_user;
-        uint? enrolled = current_student.enrolledSubjects.Find(id => id == isubject.id);
+
+        if (current_student.enrolledSubjects == null) current_student.enrolledSubjects = new List<Subject>();
+        
+        Subject? enrolled = current_student.enrolledSubjects.Find(sub => sub == isubject);
+
         if (enrolled != null) {
             Console.WriteLine ("Already enrolled in course");
             return -1;
         }
 
-        isubject.studentsEnrolled.Add(current_student.id);
-        if (current_student.enrolledSubjects == null) current_student.enrolledSubjects = new List<uint>();
-        
-        current_student.enrolledSubjects.Add(isubject.id);
+        isubject.studentsEnrolled.Add(current_student);
+
+        current_student.enrolledSubjects.Add(isubject);
+
 
         push_data();
+
 
         return 0;
     }
@@ -168,13 +175,13 @@ public class MainWindowModel
 
         foreach (var user in users) {
             if (user is Teacher teacher && teacher.subjects != null) {
-                teacher.subjects.RemoveAll(s => s == rsubject.id); 
+                teacher.subjects.RemoveAll(s => s == rsubject); 
             }
         }
             
         foreach (var user in users) {
             if (user is Student student && student.enrolledSubjects != null) {
-                student.enrolledSubjects.RemoveAll(s => s == rsubject.id);
+                student.enrolledSubjects.RemoveAll(s => s == rsubject);
             }
         }  
 
@@ -198,15 +205,23 @@ public class MainWindowModel
             return -1;
         }
 
-        uint? enrollment = current_student.enrolledSubjects.Find(id => id == rsubject.id);
+        Subject? foundSub = current_student.enrolledSubjects.Find(sub => sub.id == rsubject.id);
 
-        if (enrollment == null) {
+        if (foundSub == null) {
             Console.WriteLine("You are not enrolled in such a course");
             return -1;
         }
 
-        current_student.enrolledSubjects.Remove(rsubject.id);
-        rsubject.studentsEnrolled.Remove(current_student.id);
+        foreach (Subject subj in current_student.enrolledSubjects) {
+            Console.WriteLine(subj.name);
+        }
+
+        current_student.enrolledSubjects.Remove(foundSub);
+        rsubject.studentsEnrolled.Remove(current_student);
+
+        foreach (Subject subj in current_student.enrolledSubjects) {
+            Console.WriteLine(subj.name);
+        }
 
         push_data();
 

@@ -1,25 +1,60 @@
-﻿using Assignment2.Models;
+﻿using System.Collections.ObjectModel;
+using Assignment2.Models;
 using Assignment2.Views;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Collections.Generic;
+using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace Assignment2.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
+    [ObservableProperty]
+    private MainWindowModel model;
     
-    private MainWindowModel Model;
+    // If student then enrolled subjects
+    private List<Subject> _studentsEnrolled;
 
-    // [ObservableProperty] public UserControl currentView;
-    // private StudentView _studentView = new StudentView(){DataContext=new StudentViewModel()};
+    public List<Subject> studentsNotEnrolled { get; set; }
+    
+    public List<Subject> teachersTeaching { get; set; }
 
-    // private Login _loginView = new Login(){DataContext=new LoginViewModel()};
+    [ObservableProperty] public UserControl currentView;
+    private LoginView _loginView;
+
+    public StudentView StudentView { get; private set; }
+    public TeacherView TeacherView { get; private set; }
+    
+    // Enroll textbox
+    [ObservableProperty]
+    private string enrollTextBox; 
+
+    [ObservableProperty]
+    private string dropTextBox;
+
+
+    [ObservableProperty]
+    private ObservableCollection<Subject> linkedSubjects = new ObservableCollection<Subject>();
+    
+    
     
     public MainWindowViewModel()
     {
+        model = new MainWindowModel(); // Instantiate the model
+
+        // var loginViewModel = new LoginViewModel(this);
+        // _loginView = new LoginView() { DataContext = loginViewModel };
+
+        var loginViewModel = new LoginViewModel(this, model);
+        _loginView = new LoginView() { DataContext = loginViewModel };
         
-        Model = new MainWindowModel(); // Instantiate the model
+
+        StudentView = new StudentView() { DataContext =  this };
+        TeacherView = new TeacherView() { DataContext = this };
+        /*
         Model.register("Bjarne", "apparatus1234", true); // isteacher = true
         Model.register("Fateme", "WHAAAT??", true);
         Model.register("Balage", "tricking2000", false);
@@ -37,15 +72,66 @@ public partial class MainWindowViewModel : ViewModelBase
         Model.login("Arturo", "pogacs4");
         Model.enroll_subject("Dynamics");
         Model.drop_subject("Dynamics");
-        // currentView = _loginView;
-        
+        */
+        currentView = _loginView;
+
+        // Subject temp_subject = new Subject("asd", "foo", 0);
+        // linkedSubjects.Add(temp_subject);
+
+        if (model.current_user is Student student)
+        {
+            linkedSubjects = new ObservableCollection<Subject>(student.enrolledSubjects);
+        }
+        else if (model.current_user is Teacher teacher) {
+            linkedSubjects = new ObservableCollection<Subject>(teacher.subjects);
+        }
+
+
     }
 
     
-    // [RelayCommand]
-    // public void ToStudentView()
-    // {
-    //     currentView = _studentView;
-    // }
+    [RelayCommand]
+    public void ToStudentView()
+    {
+        currentView = StudentView;
+    }
+
+    [RelayCommand]
+    public void ToTeacherView()
+    {
+        //private TeacherView _teacherView = new TeacherView(){DataContext= new TeacherViewModel()};
+        currentView = TeacherView;
+    }
+     
+    // Wrapper for Enroll button
+    public void EnrollButton()
+    {
+        model.enroll_subject(enrollTextBox);
+
+        if (model.current_user is Student student)
+        {
+            // Refresh the LinkedSubjects observable collection
+            LinkedSubjects.Clear();
+            foreach (var subj in student.enrolledSubjects)
+            {
+                LinkedSubjects.Add(subj);
+            }
+        }
+    }
+
+    public void DropSubject () {
+        model.drop_subject(dropTextBox);
+        if (model.current_user is Student student)
+        {
+            // Refresh the LinkedSubjects observable collection
+            LinkedSubjects.Clear();
+            foreach (var subj in student.enrolledSubjects)
+            {
+                LinkedSubjects.Add(subj);
+            }
+        }
+    }
+    /*
+    */
 
 }
