@@ -35,10 +35,21 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private string dropTextBox;
 
+    [ObservableProperty]
+    private string subName;
+
+    [ObservableProperty]
+    private string subDet;
+
+    [ObservableProperty]
+    private string delSubName;
+
 
     [ObservableProperty]
     private ObservableCollection<Subject> linkedSubjects = new ObservableCollection<Subject>();
-    
+
+    [ObservableProperty]
+    private ObservableCollection<Subject> allSubjects = new ObservableCollection<Subject>();
     
     
     public MainWindowViewModel()
@@ -86,6 +97,8 @@ public partial class MainWindowViewModel : ViewModelBase
             linkedSubjects = new ObservableCollection<Subject>(teacher.subjects);
         }
 
+        allSubjects = new ObservableCollection<Subject>(model.subjects);
+
 
     }
 
@@ -108,9 +121,17 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         model.enroll_subject(enrollTextBox);
 
-        if (model.current_user is Student student)
-        {
-            // Refresh the LinkedSubjects observable collection
+
+        // if (model.current_user != null)
+        // {
+        //     var updatedUser = model.users.Find(u => u.username == model.current_user.username);
+        //     if (updatedUser != null)
+        //     {
+        //         model.current_user = updatedUser;
+        //     }
+        // }
+        // UpdateUI();
+        if (model.current_user is Student student) {
             LinkedSubjects.Clear();
             foreach (var subj in student.enrolledSubjects)
             {
@@ -121,9 +142,17 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public void DropSubject () {
         model.drop_subject(dropTextBox);
-        if (model.current_user is Student student)
-        {
-            // Refresh the LinkedSubjects observable collection
+
+        // if (model.current_user != null)
+        // {
+        //     var updatedUser = model.users.Find(u => u.username == model.current_user.username);
+        //     if (updatedUser != null)
+        //     {
+        //         model.current_user = updatedUser;
+        //     }
+        // }
+        // UpdateUI();
+        if (model.current_user is Student student) {
             LinkedSubjects.Clear();
             foreach (var subj in student.enrolledSubjects)
             {
@@ -131,7 +160,58 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         }
     }
-    /*
-    */
 
+    public void CreateSub () {
+        model.create_subject(subName, subDet);
+
+        // if (model.current_user != null)
+        // {
+        //     var updatedUser = model.users.Find(u => u.username == model.current_user.username);
+        //     if (updatedUser != null)
+        //     {
+        //         model.current_user = updatedUser;
+        //     }
+        // }
+        // UpdateUI();
+        if (model.current_user is Teacher teacher)
+        {
+            // Refresh the LinkedSubjects observable collection
+            LinkedSubjects.Clear();
+            foreach (var subj in teacher.subjects)
+            {
+                LinkedSubjects.Add(subj);
+            }
+        }
+        AllSubjects = new ObservableCollection<Subject>(model.subjects);
+    }
+
+    public void DeleteSub()
+    {
+        model.delete_subject(delSubName);
+
+        // First update AllSubjects since that's working correctly
+        AllSubjects = new ObservableCollection<Subject>(model.subjects);
+        
+        if (model.current_user is Teacher teacher)
+        {
+            // Explicitly update the teacher's subjects to match what's in model.subjects
+            teacher.subjects = model.subjects
+                .Where(s => s.teacher?.id == teacher.id)
+                .ToList();
+                
+            // Now refresh the LinkedSubjects
+            LinkedSubjects.Clear();
+            foreach (var subj in teacher.subjects)
+            {
+                LinkedSubjects.Add(subj);
+            }
+        }
+    }
+
+    public void Logout () {
+        model.logout();
+        // _loginView = new LoginView() { DataContext = new LoginViewModel(this, model) };
+        // currentView = _loginView;
+        CurrentView = new LoginView() { DataContext = new LoginViewModel(this, model) };
+    }
 }

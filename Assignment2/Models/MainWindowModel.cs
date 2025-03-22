@@ -99,8 +99,13 @@ public class MainWindowModel
         current_user = null;
     }
 
-    public int create_subject (string iname, string idetails, string iteacher) {
+    public int create_subject (string iname, string idetails) {
         fetch_data();
+        if (current_user is not Teacher) {
+            Console.WriteLine("You don't have the privilages");
+            return -1;
+        }
+        
         // Teacher current_teacher = (Teacher)users.Find(user => user.username == iteacher);
         Teacher current_teacher = (Teacher)current_user;
         if (current_teacher == null || current_teacher is not Teacher) return -1;
@@ -114,7 +119,7 @@ public class MainWindowModel
             current_teacher.subjects = new List<Subject>();
         }
 
-        Subject subject = new Subject(iname, idetails, current_teacher.id);
+        Subject subject = new Subject(iname, idetails, current_teacher);
         subject.id = no_subjects;
         no_subjects++;
         current_teacher.subjects.Add(subject);
