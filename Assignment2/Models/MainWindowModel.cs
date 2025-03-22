@@ -153,6 +153,9 @@ public class MainWindowModel
             return -1;
         }
 
+         // Ensure that the studentsEnrolled list is initialized
+        if (isubject.studentsEnrolled == null) isubject.studentsEnrolled = new List<Student>();
+
         isubject.studentsEnrolled.Add(current_student);
 
         current_student.enrolledSubjects.Add(isubject);

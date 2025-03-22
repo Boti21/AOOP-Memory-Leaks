@@ -212,6 +212,8 @@ public partial class MainWindowViewModel : ViewModelBase
         model.logout();
         // _loginView = new LoginView() { DataContext = new LoginViewModel(this, model) };
         // currentView = _loginView;
+        linkedSubjects.Clear();
+        allSubjects.Clear();
         CurrentView = new LoginView() { DataContext = new LoginViewModel(this, model) };
     }
 }
