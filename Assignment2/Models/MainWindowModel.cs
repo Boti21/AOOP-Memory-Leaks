@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 
 
 namespace Assignment2.Models;
@@ -26,6 +27,10 @@ public class MainWindowModel
 
     public uint no_users;
     public uint no_subjects;
+    const int keySize = 64;
+    const int iterations = 350000;
+
+    HashAlgorithmName hashAlgorithm = HashAlgorithmName.SHA512;
 
     private static readonly JsonSerializerOptions jsonOptions = new() {
         WriteIndented = true, // Pretty-print JSON
@@ -63,7 +68,12 @@ public class MainWindowModel
         current_user.id = no_users;
         no_users++;
         current_user.username = iuser;
-        current_user.password = ipass;
+
+        byte[] salt;
+        string hashedPass = HashPassword(ipass, out salt);
+
+        current_user.password = hashedPass;
+        current_user.salt = Convert.ToHexString(salt); // Store salt as hex string
 
         users.Add(current_user);
 
@@ -86,7 +96,10 @@ public class MainWindowModel
         current_user = users.Find(user => user.username == iuser);
 
 
-        if(current_user != null && current_user.password == ipass) {
+        byte[] salt = Convert.FromHexString(current_user.salt); // Retrieve stored salt 
+        bool correctPass = VerifyPassword(ipass, current_user.password, salt);
+        
+        if(current_user != null && correctPass) {
             Console.WriteLine("Match");
             return 1;
         }
@@ -260,4 +273,22 @@ public class MainWindowModel
         data = JsonSerializer.Serialize(modelData, jsonOptions);
         File.WriteAllText(filePath, data);
     }
+
+    private string HashPassword (string password, out byte[] salt) {
+        salt = RandomNumberGenerator.GetBytes(keySize);
+        var hash = Rfc2898DeriveBytes.Pbkdf2(
+            Encoding.UTF8.GetBytes(password),
+            salt,
+            iterations,
+            hashAlgorithm,
+            keySize);
+        return Convert.ToHexString(hash);
+    }
+
+    private bool VerifyPassword(string password, string hash, byte[] salt)
+    {
+        var hashToCompare = Rfc2898DeriveBytes.Pbkdf2(password, salt, iterations, hashAlgorithm, keySize);
+        return CryptographicOperations.FixedTimeEquals(hashToCompare, Convert.FromHexString(hash));
+    }
+    
 }
