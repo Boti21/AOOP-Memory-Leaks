@@ -192,6 +192,12 @@ public class MainWindowModel
             return -1;
         }
 
+        if (rsubject.teacher.id != current_user.id)
+        {
+            Console.WriteLine("Don't you dare delete someone else's course");
+            return -1;
+        }
+
         subjects.Remove(rsubject);
 
         foreach (var user in users) {
