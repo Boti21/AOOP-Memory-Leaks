@@ -207,6 +207,9 @@ public partial class MainWindowModel : ObservableObject
             return -1;
         }
 
+        // Ensure that the studentsEnrolled list is initialized
+        if (isubject.studentsEnrolled == null) isubject.studentsEnrolled = new List<Student>();
+
         if (current_student.displayedSubjects == null) current_student.displayedSubjects = new List<Subject>();
 
         isubject.studentsEnrolled.Add(current_student);
