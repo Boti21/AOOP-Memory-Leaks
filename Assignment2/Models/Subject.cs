@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using CommunityToolkit.Mvvm.Input;
 
 namespace Assignment2.Models;
 
@@ -11,13 +10,11 @@ public class Subject {
     public Teacher teacher { get; set; }
     public List<Student> studentsEnrolled { get; set; }
 
-
-    public Subject() {}
-
+    public Subject() { }
     public Subject(string iname, string idetails, Teacher iteacher) {
-        name = iname;
-        details = idetails;
-        teacher = iteacher;
+        this.name = iname;
+        this.details = idetails;
+        this.teacher = iteacher;
         studentsEnrolled = new List<Student>();
     }
 }

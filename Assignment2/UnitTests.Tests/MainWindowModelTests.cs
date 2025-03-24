@@ -37,7 +37,7 @@ public class MainWindowModelTests : IDisposable
     {
         var Model = CreateModelInstance();
 
-        int result = Model.login("ShowThePainHarold", "pain", false);
+        int result = Model.login("ShowThePainHarold", "pain");
 
         Assert.Equal(-1, result);
     }
@@ -47,7 +47,7 @@ public class MainWindowModelTests : IDisposable
     {
         var Model = CreateModelInstance();
 
-        int result = Model.login("Bjarne", "apparatus4321", true);
+        int result = Model.login("Bjarne", "apparatus4321");
 
         Assert.Equal(0, result);
     }
@@ -67,7 +67,7 @@ public class MainWindowModelTests : IDisposable
     {
         var Model = CreateModelInstance();
         
-        Model.login("Balage", "tricking2000", false);
+        Model.login("Balage", "tricking2000");
 
         int result = Model.delete_subject("Dynamics");
 
@@ -81,7 +81,7 @@ public class MainWindowModelTests : IDisposable
     {
         var Model = CreateModelInstance();
 
-        Model.login("Balage", "tricking2000", false);
+        Model.login("Balage", "tricking2000");
 
         int result = Model.enroll_subject("MATH3");
 
@@ -94,7 +94,7 @@ public class MainWindowModelTests : IDisposable
     {
         var Model = CreateModelInstance();
 
-        Model.login("Bjarne", "apparatus1234", true);
+        Model.login("Bjarne", "apparatus1234");
 
         int result = Model.drop_subject("MATH1");
 

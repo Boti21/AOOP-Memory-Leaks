@@ -3,51 +3,82 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:Assignment2.ViewModels"
+             xmlns:models="using:Assignment2.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Assignment2.Views.TeacherView"
              x:DataType="vm:MainWindowViewModel">
     
-    <TabControl Margin="5">
-        <TabItem Header="My Subjects" >
-            <ListBox Name="EnrolledSubjectsList" ItemsSource="">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Border Background="LightGray" BorderBrush="Black" BorderThickness="1" Padding="5" CornerRadius="5">
-                            <StackPanel Orientation="Horizontal">
-                                <Button Content="Enroll" Command="{Binding  }" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Stretch"></Button>
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="" Padding="50, 0, 0, 0"/>
-                                    <TextBlock Text="" Padding="50, 0, 0, 0"/>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>  <!-- Top row for logout button -->
+            <RowDefinition Height="*"/>     <!-- Main content fills remaining space -->
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>   <!-- Main content -->
+            <ColumnDefinition Width="Auto"/> <!-- Logout button column -->
+        </Grid.ColumnDefinitions>
+        
+        <!-- Logout button in top right -->
+        <Button Content="Log out"
+                Command="{Binding Logout}"
+                Grid.Row="0"
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Margin="10"/>
+
+        <TabControl Grid.Row="1" Grid.ColumnSpan="2" Margin="5">
+            <TabItem Header="My Subjects" >
+                <ListBox Name="EnrolledSubjectsList" ItemsSource="{Binding LinkedSubjects}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="LightGray" BorderBrush="Black" BorderThickness="1" Padding="5" CornerRadius="5">
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="{Binding name}" Padding="50, 0, 0, 0"/>
+                                        <TextBlock Text="{Binding details}" Padding="50, 0, 0, 0"/>
+                                        <Expander Header="Enrolled students" Margin="5">
+                                            <ItemsControl ItemsSource="{Binding studentsEnrolled}" Margin="20,0,10,5">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate x:DataType="models:Student">
+                                                        <TextBlock Text="{Binding username}" Margin="0,2"/>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </Expander>
+                                    </StackPanel>
                                 </StackPanel>
-                            </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </TabItem>
-        <TabItem Header="Available Subjects" >
-            <StackPanel Orientation="Vertical">
-                <StackPanel Orientation="Horizontal">
-                    <TextBox Text="{Binding EnrollTextBox}"/>
-                    <Button Content="Enroll" Command="{Binding EnrollButton}"></Button>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+            <TabItem Header="Available Subjects" >
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Text="{Binding SubName}"/>
+                        <TextBox Text="{Binding SubDet}"/>
+                        <Button Content="Create" Command="{Binding CreateSub}"></Button>
+                        <TextBox Text="{Binding DelSubName}"/>
+                        <Button Content="Delete" Command="{Binding DeleteSub}"></Button>
+                    </StackPanel>
+                <ListBox Name="AvailableSubjectsList" ItemsSource="{Binding AllSubjects}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="LightGray" BorderBrush="Black" BorderThickness="1" Padding="5" CornerRadius="5">
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="{Binding name}" Padding="50, 0, 0, 0"/>
+                                        <TextBlock Text="{Binding details}" Padding="50, 0, 0, 0"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                    
                 </StackPanel>
-            <ListBox Name="AvailableSubjectsList" ItemsSource="{Binding Model.subjects}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Border Background="LightGray" BorderBrush="Black" BorderThickness="1" Padding="5" CornerRadius="5">
-                            <StackPanel Orientation="Horizontal">
-                                <Button Content="Enroll" Command="{Binding  }" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Stretch"></Button>
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="{Binding name}" Padding="50, 0, 0, 0"/>
-                                    <TextBlock Text="{Binding details}" Padding="50, 0, 0, 0"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-                
-            </StackPanel>
-        </TabItem>
-    </TabControl>
+            </TabItem>
+        </TabControl>
+    </Grid>
 </UserControl>

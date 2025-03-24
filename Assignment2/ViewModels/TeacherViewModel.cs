@@ -12,14 +12,14 @@ public partial class TeacherViewModel : ViewModelBase
 
     public TeacherViewModel()
     {
-        // Subject temp_subject = new Subject("asd", "foo", );
+        // Subject temp_subject = new Subject("asd", "foo", 0);
         // subjects.Add(temp_subject);
     }
 
     [RelayCommand]
     public void setup()
     {
-        // Subject temp_subject = new Subject("asd", "foo", );
+        // Subject temp_subject = new Subject("asd", "foo", 0);
         // subjects.Add(temp_subject);
     }
     

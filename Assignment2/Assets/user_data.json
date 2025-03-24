@@ -1,5 +1,5 @@
 {
-"$id": "1",
+  "$id": "1",
   "users": {
     "$id": "2",
     "$values": [
@@ -47,9 +47,9 @@
           "$values": [
             {
               "$id": "11",
-              "name": "MATH1",
-              "id": 0,
-              "details": "The best course you\u0027ll ever have in you life",
+              "name": "ELEC2",
+              "id": 2,
+              "details": "Mostly OpAmps",
               "teacher": {
                 "$id": "12",
                 "subjects": {
@@ -60,99 +60,13 @@
                     }
                   ]
                 },
-                "id": 0,
-                "name": null,
-                "username": "Bjarne",
-                "password": "apparatus1234"
-              },
-              "studentsEnrolled": {
-                "$id": "14",
-                "$values": [
-                  {
-                    "$ref": "9"
-                  },
-                  {
-                    "$id": "15",
-                    "enrolledSubjects": {
-                      "$id": "16",
-                      "$values": [
-                        {
-                          "$ref": "11"
-                        },
-                        {
-                          "$id": "17",
-                          "name": "Dynamics",
-                          "id": 1,
-                          "details": "Probably just as good as MATH1",
-                          "teacher": {
-                            "$id": "18",
-                            "subjects": {
-                              "$id": "19",
-                              "$values": [
-                                {
-                                  "$id": "20",
-                                  "name": "MATH1",
-                                  "id": 0,
-                                  "details": "The best course you\u0027ll ever have in you life",
-                                  "teacher": {
-                                    "$ref": "18"
-                                  },
-                                  "studentsEnrolled": {
-                                    "$id": "21",
-                                    "$values": []
-                                  }
-                                },
-                                {
-                                  "$ref": "17"
-                                }
-                              ]
-                            },
-                            "id": 0,
-                            "name": null,
-                            "username": "Bjarne",
-                            "password": "apparatus1234"
-                          },
-                          "studentsEnrolled": {
-                            "$id": "22",
-                            "$values": [
-                              {
-                                "$ref": "15"
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    },
-                    "id": 4,
-                    "name": null,
-                    "username": "Arturo",
-                    "password": "pogacs4"
-                  }
-                ]
-              }
-            },
-            {
-              "$id": "23",
-              "name": "ELEC2",
-              "id": 2,
-              "details": "Mostly OpAmps",
-              "teacher": {
-                "$id": "24",
-                "subjects": {
-                  "$id": "25",
-                  "$values": [
-                    {
-                      "$ref": "23"
-                    }
-                  ]
-                },
                 "id": 1,
                 "name": null,
                 "username": "Bente",
                 "password": "digital"
               },
               "studentsEnrolled": {
-                "$id": "26",
+                "$id": "14",
                 "$values": [
                   {
                     "$ref": "9"
@@ -168,21 +82,24 @@
         "password": "tricking2000"
       },
       {
-        "$ref": "15"
+        "$id": "15",
+        "type": "student",
+        "enrolledSubjects": {
+          "$id": "16",
+          "$values": []
+        },
+        "id": 4,
+        "name": null,
+        "username": "Arturo",
+        "password": "pogacs4"
       }
     ]
   },
   "subjects": {
-    "$id": "27",
+    "$id": "17",
     "$values": [
       {
         "$ref": "11"
-      },
-      {
-        "$ref": "17"
-      },
-      {
-        "$ref": "23"
       }
     ]
   }

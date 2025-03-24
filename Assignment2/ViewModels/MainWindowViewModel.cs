@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Collections.ObjectModel;
 using Assignment2.Models;
 using Assignment2.Views;
 using Avalonia.Controls;
@@ -15,6 +14,7 @@ public partial class MainWindowViewModel : ViewModelBase
 {
     [ObservableProperty]
     private MainWindowModel model;
+    
     // If student then enrolled subjects
     private List<Subject> _studentsEnrolled;
 
@@ -30,7 +30,7 @@ public partial class MainWindowViewModel : ViewModelBase
     
     // Enroll textbox
     [ObservableProperty]
-    private string enrollTextBox;
+    private string enrollTextBox; 
 
     [ObservableProperty]
     private string dropTextBox;
@@ -43,18 +43,25 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private string delSubName;
+
+
     [ObservableProperty]
     private ObservableCollection<Subject> linkedSubjects = new ObservableCollection<Subject>();
 
     [ObservableProperty]
     private ObservableCollection<Subject> allSubjects = new ObservableCollection<Subject>();
     
+    
     public MainWindowViewModel()
     {
         model = new MainWindowModel(); // Instantiate the model
 
-        var loginViewModel = new LoginViewModel(this);
+        // var loginViewModel = new LoginViewModel(this);
+        // _loginView = new LoginView() { DataContext = loginViewModel };
+
+        var loginViewModel = new LoginViewModel(this, model);
         _loginView = new LoginView() { DataContext = loginViewModel };
+        
 
         StudentView = new StudentView() { DataContext =  this };
         TeacherView = new TeacherView() { DataContext = this };
@@ -79,6 +86,9 @@ public partial class MainWindowViewModel : ViewModelBase
         */
         currentView = _loginView;
 
+        // Subject temp_subject = new Subject("asd", "foo", 0);
+        // linkedSubjects.Add(temp_subject);
+
         if (model.current_user is Student student)
         {
             linkedSubjects = new ObservableCollection<Subject>(student.enrolledSubjects);
@@ -88,6 +98,8 @@ public partial class MainWindowViewModel : ViewModelBase
         }
 
         allSubjects = new ObservableCollection<Subject>(model.subjects);
+
+
     }
 
     
@@ -103,13 +115,14 @@ public partial class MainWindowViewModel : ViewModelBase
         //private TeacherView _teacherView = new TeacherView(){DataContext= new TeacherViewModel()};
         currentView = TeacherView;
     }
-    
+     
     // Wrapper for Enroll button
     public void EnrollButton()
     {
         model.enroll_subject(enrollTextBox);
 
-//      if (model.current_user != null)
+
+        // if (model.current_user != null)
         // {
         //     var updatedUser = model.users.Find(u => u.username == model.current_user.username);
         //     if (updatedUser != null)
@@ -129,6 +142,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public void DropSubject () {
         model.drop_subject(dropTextBox);
+
         // if (model.current_user != null)
         // {
         //     var updatedUser = model.users.Find(u => u.username == model.current_user.username);
@@ -200,7 +214,6 @@ public partial class MainWindowViewModel : ViewModelBase
         // currentView = _loginView;
         linkedSubjects.Clear();
         allSubjects.Clear();
-        CurrentView = new LoginView() { DataContext = new LoginViewModel(this) };
+        CurrentView = new LoginView() { DataContext = new LoginViewModel(this, model) };
     }
-
 }

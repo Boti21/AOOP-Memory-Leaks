@@ -1,5 +1,3 @@
-using CommunityToolkit.Mvvm.ComponentModel;
-
 namespace Assignment2.Models;
 
 using System.Text.Json.Serialization;
@@ -13,5 +11,4 @@ public abstract class User {
     public string name { get; set; }
     public string username { get; set; }
     public string password { get; set; }
-    public List<Subject> displayedSubjects { get; set; }
 }
