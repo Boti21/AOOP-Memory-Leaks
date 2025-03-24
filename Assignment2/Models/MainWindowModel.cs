@@ -158,8 +158,12 @@ public partial class MainWindowModel : ObservableObject
         return 0;
     }
 
-    public int create_subject (string iname, string idetails, string iteacher) {
+    public int create_subject (string iname, string idetails) {
         fetch_data();
+        if (current_user is not Teacher) {
+            Console.WriteLine("You don't have the privileges");
+            return -1;
+        }
         // Teacher current_teacher = (Teacher)users.Find(user => user.username == iteacher);
         Teacher current_teacher = (Teacher)current_user;
         if (current_teacher == null || current_teacher is not Teacher) return -1;
@@ -173,7 +177,7 @@ public partial class MainWindowModel : ObservableObject
             current_teacher.subjects = new List<Subject>();
         }
  
-        Subject subject = new Subject(iname, idetails, current_teacher.id);
+        Subject subject = new Subject(iname, idetails, current_teacher);
         subject.id = no_subjects;
         no_subjects++;
         current_teacher.subjects.Add(subject);

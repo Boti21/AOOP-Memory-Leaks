@@ -57,7 +57,7 @@ public class MainWindowModelTests : IDisposable
     {
         var Model = CreateModelInstance();
 
-        int result = Model.create_subject("Dynamics", "The other best course", "Bjarne");
+        int result = Model.create_subject("Dynamics", "The other best course");
 
         Assert.Equal(-1, result);
     }

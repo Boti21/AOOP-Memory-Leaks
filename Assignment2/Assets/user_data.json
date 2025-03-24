@@ -17,69 +17,53 @@
       },
       {
         "$id": "5",
-        "type": "teacher",
-        "subjects": {
-          "$id": "6",
-          "$values": []
-        },
-        "id": 1,
-        "name": null,
-        "username": "Fateme",
-        "password": "WHAAAT??"
-      },
-      {
-        "$id": "7",
         "type": "student",
         "enrolledSubjects": {
-          "$id": "8",
+          "$id": "6",
           "$values": [
             {
-              "$id": "9",
-              "name": "Dynamics",
-              "id": 1,
-              "details": "The other best course",
-              "teacher": 0,
+              "$id": "7",
+              "name": "MATH1",
+              "id": 0,
+              "details": "really good course",
+              "teacher": {
+                "$id": "8",
+                "subjects": {
+                  "$id": "9",
+                  "$values": [
+                    {
+                      "$ref": "7"
+                    }
+                  ]
+                },
+                "id": 0,
+                "name": null,
+                "username": "Bjarne",
+                "password": "apparatus1234"
+              },
               "studentsEnrolled": {
                 "$id": "10",
                 "$values": [
                   {
-                    "$id": "11",
-                    "enrolledSubjects": {
-                      "$id": "12",
-                      "$values": [
-                        {
-                          "$ref": "9"
-                        }
-                      ]
-                    },
-                    "id": 3,
-                    "name": null,
-                    "username": "Arturo",
-                    "password": "pogacs4"
-                  },
-                  {
-                    "$ref": "7"
+                    "$ref": "5"
                   }
                 ]
               }
             }
           ]
         },
-        "id": 2,
+        "id": 1,
         "name": null,
         "username": "Balage",
         "password": "tricking2000"
-      },
-      {
-        "$ref": "11"
       }
     ]
   },
   "subjects": {
-    "$id": "13",
+    "$id": "11",
     "$values": [
       {
-        "$ref": "9"
+        "$ref": "7"
       }
     ]
   }

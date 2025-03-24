@@ -8,13 +8,13 @@ public class Subject {
     public string name { get; set; }
     public uint id { get; set; }
     public string details { get; set; }
-    public uint teacher { get; set; }
+    public Teacher teacher { get; set; }
     public List<Student> studentsEnrolled { get; set; }
 
 
     public Subject() {}
 
-    public Subject(string iname, string idetails, uint iteacher) {
+    public Subject(string iname, string idetails, Teacher iteacher) {
         name = iname;
         details = idetails;
         teacher = iteacher;
