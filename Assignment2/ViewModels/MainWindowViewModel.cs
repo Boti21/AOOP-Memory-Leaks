@@ -1,9 +1,13 @@
 ﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using Assignment2.Models;
 using Assignment2.Views;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Collections.Generic;
+using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace Assignment2.ViewModels;
 
@@ -11,7 +15,6 @@ public partial class MainWindowViewModel : ViewModelBase
 {
     [ObservableProperty]
     private MainWindowModel model;
-    
     // If student then enrolled subjects
     private List<Subject> _studentsEnrolled;
 
@@ -28,14 +31,11 @@ public partial class MainWindowViewModel : ViewModelBase
     // Enroll textbox
     [ObservableProperty]
     private string enrollTextBox;
-    
-    
-    
-    // Wrapper for Enroll button
-    public void EnrollButton()
-    {
-        model.enroll_subject(enrollTextBox);
-    }
+
+    [ObservableProperty]
+    private string dropTextBox;
+    [ObservableProperty]
+    private ObservableCollection<Subject> linkedSubjects = new ObservableCollection<Subject>();
     
     public MainWindowViewModel()
     {
@@ -67,9 +67,13 @@ public partial class MainWindowViewModel : ViewModelBase
         */
         currentView = _loginView;
 
-
-        _studentsEnrolled = model.studentEnrolledSubjects;
-        _studentsEnrolled.Add(new Subject("Example of how this should work", "but it doesn't, and we don't know why and we also do not have time to fix it", 0));
+        if (model.current_user is Student student)
+        {
+            linkedSubjects = new ObservableCollection<Subject>(student.enrolledSubjects);
+        }
+        else if (model.current_user is Teacher teacher) {
+            linkedSubjects = new ObservableCollection<Subject>(teacher.subjects);
+        }
     }
 
     
@@ -85,7 +89,34 @@ public partial class MainWindowViewModel : ViewModelBase
         //private TeacherView _teacherView = new TeacherView(){DataContext= new TeacherViewModel()};
         currentView = TeacherView;
     }
-    /*
-    */
+    
+    // Wrapper for Enroll button
+    public void EnrollButton()
+    {
+        model.enroll_subject(enrollTextBox);
+
+        if (model.current_user is Student student)
+        {
+            // Refresh the LinkedSubjects observable collection
+            LinkedSubjects.Clear();
+            foreach (var subj in student.enrolledSubjects)
+            {
+                LinkedSubjects.Add(subj);
+            }
+        }
+    }
+
+    public void DropSubject () {
+        model.drop_subject(dropTextBox);
+        if (model.current_user is Student student)
+        {
+            // Refresh the LinkedSubjects observable collection
+            LinkedSubjects.Clear();
+            foreach (var subj in student.enrolledSubjects)
+            {
+                LinkedSubjects.Add(subj);
+            }
+        }
+    }
 
 }

@@ -1,59 +1,86 @@
 {
-  "users": [
-    {
-      "type": "teacher",
-      "subjects": [],
-      "id": 0,
-      "name": null,
-      "username": "Bjarne",
-      "password": "apparatus1234"
-    },
-    {
-      "type": "teacher",
-      "subjects": [],
-      "id": 1,
-      "name": null,
-      "username": "Fateme",
-      "password": "WHAAAT??"
-    },
-    {
-      "type": "student",
-      "enrolledSubjects": [1],
-      "id": 2,
-      "name": null,
-      "username": "Balage",
-      "password": "tricking2000"
-    },
-    {
-      "type": "student",
-      "enrolledSubjects": [],
-      "id": 3,
-      "name": null,
-      "username": "Arturo",
-      "password": "pogacs4"
-    }
-  ],
-  "subjects": [
-    {
-      "name": "Dynamics",
-      "id": 1,
-      "details": "The other best course",
-      "teacher": 0,
-      "studentsEnrolled": [2]
-    },
-    {
-      "name": "AOOP",
-      "id": 2,
-      "details": "The best course",
-      "teacher": 1,
-      "studentsEnrolled": [2]
-    },
-    {
-      "name": "Statics",
-      "id": 3,
-      "details": "Not the best",
-      "teacher": 3,
-      "studentsEnrolled": [3]
-    }
-  ]
+"$id": "1",
+  "users": {
+    "$id": "2",
+    "$values": [
+      {
+        "$id": "3",
+        "type": "teacher",
+        "subjects": {
+          "$id": "4",
+          "$values": []
+        },
+        "id": 0,
+        "name": null,
+        "username": "Bjarne",
+        "password": "apparatus1234"
+      },
+      {
+        "$id": "5",
+        "type": "teacher",
+        "subjects": {
+          "$id": "6",
+          "$values": []
+        },
+        "id": 1,
+        "name": null,
+        "username": "Fateme",
+        "password": "WHAAAT??"
+      },
+      {
+        "$id": "7",
+        "type": "student",
+        "enrolledSubjects": {
+          "$id": "8",
+          "$values": [
+            {
+              "$id": "9",
+              "name": "Dynamics",
+              "id": 1,
+              "details": "The other best course",
+              "teacher": 0,
+              "studentsEnrolled": {
+                "$id": "10",
+                "$values": [
+                  {
+                    "$id": "11",
+                    "enrolledSubjects": {
+                      "$id": "12",
+                      "$values": [
+                        {
+                          "$ref": "9"
+                        }
+                      ]
+                    },
+                    "id": 3,
+                    "name": null,
+                    "username": "Arturo",
+                    "password": "pogacs4"
+                  },
+                  {
+                    "$ref": "7"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "id": 2,
+        "name": null,
+        "username": "Balage",
+        "password": "tricking2000"
+      },
+      {
+        "$ref": "11"
+      }
+    ]
+  },
+  "subjects": {
+    "$id": "13",
+    "$values": [
+      {
+        "$ref": "9"
+      }
+    ]
+  }
 }

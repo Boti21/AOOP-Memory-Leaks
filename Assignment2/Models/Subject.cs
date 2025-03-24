@@ -9,7 +9,7 @@ public class Subject {
     public uint id { get; set; }
     public string details { get; set; }
     public uint teacher { get; set; }
-    public List<uint> studentsEnrolled { get; set; }
+    public List<Student> studentsEnrolled { get; set; }
 
 
     public Subject() {}
@@ -18,6 +18,6 @@ public class Subject {
         name = iname;
         details = idetails;
         teacher = iteacher;
-        studentsEnrolled = new List<uint>();
+        studentsEnrolled = new List<Student>();
     }
 }

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 namespace Assignment2.Models;
 
 public class Student : User {
-    public List<uint> enrolledSubjects { get; set; }
+    public List<Subject> enrolledSubjects { get; set; }
     
     public Student() {
-        enrolledSubjects = new List<uint>();
+        enrolledSubjects = new List<Subject>();
     }
 }
