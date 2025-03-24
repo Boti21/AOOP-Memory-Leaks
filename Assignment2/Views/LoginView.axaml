@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Assignment2.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Assignment2.Views.LoginView"
+             x:DataType="vm:LoginViewModel">
+             
+    <Border Background="LightGray">
+        <Border BorderBrush="Black"
+                BorderThickness="3"
+                CornerRadius="20"
+                Background="White"
+                Height="410"
+                Width="280">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Choose type of account:" FontWeight="DemiBold"/>
+                <ListBox Background="White">
+                    <RadioButton GroupName="UserTypeToggle" Content="Teacher" IsChecked="{Binding teacherChecked, Mode=TwoWay}"/>
+                    <RadioButton GroupName="UserTypeToggle" Content="Student" IsChecked="{Binding studentChecked, Mode=TwoWay}"/>
+                </ListBox>
+                <TextBlock Text="Username:" FontWeight="DemiBold" Padding="0, 10, 0, 5"/>
+                <TextBox Text="{Binding username}"></TextBox>
+                <TextBlock Text="Password:" FontWeight="DemiBold" Padding="0, 10, 0, 5"/>
+                <TextBox Text="{Binding password}"></TextBox>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="20">
+                    <Button Command="{Binding login}" Content="Login" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20, 0, 0" FontSize="16"/>
+                    <Button Command="{Binding register}" Content="Register" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20, 0, 0" FontSize="16"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Border>
+</UserControl>

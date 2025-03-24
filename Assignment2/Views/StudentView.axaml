@@ -1,0 +1,73 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Assignment2.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Assignment2.Views.StudentView" 
+             x:DataType="vm:MainWindowViewModel">
+            
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>  <!-- Top row for logout button -->
+            <RowDefinition Height="*"/>     <!-- Main content fills remaining space -->
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>   <!-- Main content -->
+            <ColumnDefinition Width="Auto"/> <!-- Logout button column -->
+        </Grid.ColumnDefinitions>
+        
+        <!-- Logout button in top right -->
+        <Button Content="Log out"
+                Command="{Binding Logout}"
+                Grid.Row="0"
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Margin="10"/>
+
+        <TabControl Grid.Row="1" Grid.ColumnSpan="2" Margin="5">
+            <TabItem Header="Enrolled Subjects" >
+                <ListBox Name="EnrolledSubjectsList" ItemsSource="{Binding LinkedSubjects}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="LightGray" BorderBrush="Black" BorderThickness="1" Padding="5" CornerRadius="5">
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="{Binding name}" Padding="50, 0, 0, 0"/>
+                                        <TextBlock Text="{Binding details}" Padding="50, 0, 0, 0"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+            <TabItem Header="Available Subjects" >
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Text="{Binding EnrollTextBox}"/>
+                        <Button Content="Enroll" Command="{Binding EnrollButton}"></Button>
+                        <TextBox Text="{Binding DropTextBox}"/>
+                        <Button Content="Drop" Command="{Binding DropSubject}"></Button>
+                    </StackPanel>
+                <ListBox Name="AvailableSubjectsList" ItemsSource="{Binding AllSubjects}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="LightGray" BorderBrush="Black" BorderThickness="1" Padding="5" CornerRadius="5">
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="{Binding name}" Padding="50, 0, 0, 0"/>
+                                        <TextBlock Text="{Binding details}" Padding="50, 0, 0, 0"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                    
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+        </Grid>
+</UserControl>
