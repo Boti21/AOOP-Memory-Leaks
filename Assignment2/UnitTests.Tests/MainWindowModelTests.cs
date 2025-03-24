@@ -89,7 +89,6 @@ public class MainWindowModelTests : IDisposable
     }
 
     [Fact]
-
     public void DropSubjectAsTeacher()
     {
         var Model = CreateModelInstance();
