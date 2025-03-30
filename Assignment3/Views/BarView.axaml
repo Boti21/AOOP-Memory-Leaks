@@ -1,0 +1,61 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Assignment3.Views.BarView"
+             x:CompileBindings="False">
+
+    <StackPanel Orientation="Vertical" Margin="15" Spacing="20">
+        <StackPanel Orientation="Horizontal" Spacing="30" HorizontalAlignment="Center">
+            <TextBlock Text="X-source"/>
+            <ComboBox Name="BarXSelect"
+                      ItemsSource="{Binding Headers}"
+                      SelectedItem="{Binding XHeader, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Spacing="30" HorizontalAlignment="Center">
+            <TextBlock Text="Y-source"/>
+            <ComboBox Name="BarYSelect"
+                      ItemsSource="{Binding Headers}"
+                      SelectedItem="{Binding YHeader, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+        <StackPanel Name="NumericSection" Orientation="Horizontal" Spacing="30" IsVisible="True">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="X-range" HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox/>
+                    <TextBox/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Y-range" HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox/>
+                    <TextBox/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+        <ListBox Name="StringSection" ItemsSource="{Binding SelectedData}" IsVisible="False">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Background="LightGray" BorderBrush="Black" BorderThickness="1" CornerRadius="5"
+                            Height="40" Width="200">
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox></CheckBox>
+                            <TextBlock Text="{Binding }" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </StackPanel>
+</UserControl>

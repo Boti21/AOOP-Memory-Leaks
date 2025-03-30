@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Assignment3.Views.PieView"
+             x:CompileBindings="False">
+    <StackPanel Orientation="Vertical" Margin="15" Spacing="20">
+        <StackPanel Orientation="Horizontal" Spacing="30" HorizontalAlignment="Center">
+            <TextBlock Text="X-source"/>
+            <ComboBox Name="PieXSelect"
+                        ItemsSource="{Binding Headers}"
+                        SelectedItem="{Binding XHeader, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Spacing="30" HorizontalAlignment="Center">
+            <TextBlock Text="Y-source"/>
+            <ComboBox Name="PieYSelect"
+                        ItemsSource="{Binding Headers}"
+                        SelectedItem="{Binding YHeader, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Spacing="30">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="X-range" HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox/>
+                    <TextBox/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Y-range" HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBox/>
+                    <TextBox/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>  
+</UserControl>

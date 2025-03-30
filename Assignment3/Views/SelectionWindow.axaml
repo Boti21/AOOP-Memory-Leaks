@@ -1,0 +1,37 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Assignment3.ViewModels"
+        xmlns:views="using:Assignment3.Views"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Assignment3.Views.SelectionWindow"
+        x:DataType="vm:SelectionWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Assignment3">
+    
+    <Design.DataContext>
+        <vm:SelectionWindowViewModel/>
+    </Design.DataContext>
+    
+    <StackPanel Orientation="Horizontal">
+        <TabControl Margin="5">
+            <TabItem Header="Bar">
+                <views:BarView DataContext="{Binding}"/>
+            </TabItem>
+            <TabItem Header="Line">
+                <views:LineView DataContext="{Binding}"/>
+            </TabItem>
+            <TabItem Header="Scatter">
+                <views:ScatterView DataContext="{Binding}"/>
+            </TabItem>
+            <TabItem Header="Pie">
+                <views:PieView DataContext="{Binding}"/>
+            </TabItem>
+        </TabControl>
+        <!-- <TextBlock Text="Hellooo??" FontSize="200"/> -->
+        <views:DesignView/>
+    </StackPanel> 
+
+
+</Window>
