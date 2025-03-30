@@ -11,5 +11,7 @@
   
     <Application.Styles>
         <FluentTheme />
+        <!-- <StyleInclude Source="avares://LiveChartsCore.SkiaSharpView.Avalonia"></StyleInclude> -->
     </Application.Styles>
+             
 </Application>

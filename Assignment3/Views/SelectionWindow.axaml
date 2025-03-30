@@ -9,7 +9,7 @@
         x:DataType="vm:SelectionWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="Assignment3">
-
+    
     <Design.DataContext>
         <vm:SelectionWindowViewModel/>
     </Design.DataContext>
@@ -17,7 +17,6 @@
     <StackPanel Orientation="Horizontal">
         <TabControl Margin="5">
             <TabItem Header="Bar">
-                <!-- Reference the separate BarView -->
                 <views:BarView DataContext="{Binding}"/>
             </TabItem>
             <TabItem Header="Line">
@@ -30,6 +29,8 @@
                 <views:PieView DataContext="{Binding}"/>
             </TabItem>
         </TabControl>
+        <!-- <TextBlock Text="Hellooo??" FontSize="200"/> -->
+        <views:DesignView/>
     </StackPanel> 
 
 

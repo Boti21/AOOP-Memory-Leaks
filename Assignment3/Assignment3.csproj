@@ -25,21 +25,34 @@
     </PackageReference>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
     <PackageReference Include="Csvhelper" Version="33.0.1" />
+    <PackageReference Include="LiveCharts" Version="0.9.7" />
     <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc5.4" />
   </ItemGroup>
 
   <ItemGroup>
     <AvaloniaXaml Update="Views\BarView.axaml">
-      <DependentUpon>SelectionModel.axaml</DependentUpon>
+      <DependentUpon>SelectionWindow.axaml</DependentUpon>
     </AvaloniaXaml>
     <AvaloniaXaml Update="Views\LineView.axaml">
-      <DependentUpon>SelectionModel.axaml</DependentUpon>
+      <DependentUpon>SelectionWindow.axaml</DependentUpon>
     </AvaloniaXaml>
     <AvaloniaXaml Update="Views\ScatterView.axaml">
-      <DependentUpon>SelectionModel.axaml</DependentUpon>
+      <DependentUpon>SelectionWindow.axaml</DependentUpon>
     </AvaloniaXaml>
     <AvaloniaXaml Update="Views\PieView.axaml">
-      <DependentUpon>SelectionModel.axaml</DependentUpon>
+      <DependentUpon>SelectionWindow.axaml</DependentUpon>
     </AvaloniaXaml>
+    <AvaloniaXaml Update="Views\DesignView.axaml">
+      <DependentUpon>SelectionWindow.axaml</DependentUpon>
+    </AvaloniaXaml>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\SelectionWindow.axaml.cs">
+      <DependentUpon>SelectionWindow.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\DesignView.axaml.cs">
+      <DependentUpon>DesignView.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

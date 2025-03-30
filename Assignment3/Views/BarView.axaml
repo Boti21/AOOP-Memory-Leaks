@@ -28,7 +28,7 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Spacing="30">
+        <StackPanel Name="NumericSection" Orientation="Horizontal" Spacing="30" IsVisible="True">
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="X-range" HorizontalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal">
@@ -44,5 +44,18 @@
                 </StackPanel>
             </StackPanel>
         </StackPanel>
+        <ListBox Name="StringSection" ItemsSource="{Binding SelectedData}" IsVisible="False">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Background="LightGray" BorderBrush="Black" BorderThickness="1" CornerRadius="5"
+                            Height="40" Width="200">
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox></CheckBox>
+                            <TextBlock Text="{Binding }" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </StackPanel>
 </UserControl>
