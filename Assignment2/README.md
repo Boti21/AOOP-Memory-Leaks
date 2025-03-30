@@ -7,8 +7,13 @@ SDU Advanced Object-Oriented Programming Assignment 2
 - Max Bohk
 
 ##### Contributions
-- Balazs Szakal:
+- Balazs Szakal: Backend code (Models)
 
-- Botond Bencisk:
+- Botond Bencsik: Frontend (Views)
 
-- Max Bohk:
+- Max Bohk: Unit testing and ViewModels
+
+# Things to Consider
+The group had originally started working separately on completely separate parts of the project,
+this, however lead to lacking interoperability between parts. This is a group organization issue
+and we are aware of it. We will try to fix it for the next assignment.

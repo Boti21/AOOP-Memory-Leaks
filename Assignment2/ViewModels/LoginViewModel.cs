@@ -1,6 +1,14 @@
 using System.Collections.Generic;
 using Assignment2.Models;
 using CommunityToolkit.Mvvm.Input;
+using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Windows.Input;
+using System;
+using System.IO;
+using System.Text;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Assignment2.ViewModels;
 
@@ -15,22 +23,29 @@ public class LoginViewModel : ViewModelBase
     private readonly MainWindowModel _model;
     private readonly MainWindowViewModel _viewModel;
 
-    private string _username;
-    private string _password;
+    // private string _username;
+    // private string _password;
 
-    public string username
-    {
-        get => _username;
-        set => SetProperty(ref _username, value);
-    }
-    public string password
-    {
-        get => _password;
-        set => SetProperty(ref _password, value);
-    }
+    // public string username
+    // {
+    //     get => _username;
+    //     set => SetProperty(ref _username, value);
+    // }
+    // public string password
+    // {
+    //     get => _password;
+    //     set => SetProperty(ref _password, value);
+    // }
+
+    public string username {get;set;}
+    public string password {get;set;}
+
+
+    public bool teacherChecked { get; set; }
+    public bool studentChecked { get; set; }
+    public bool isteacher {get;set;}
 
     private UserType _currentUserType;
-
     public UserType CurrentUserType
     {
         get => _currentUserType;
@@ -40,42 +55,52 @@ public class LoginViewModel : ViewModelBase
     public IRelayCommand LoginCommand { get; }
     public IRelayCommand RegisterCommand { get; }
 
-    public LoginViewModel(MainWindowViewModel viewModel)
+    public LoginViewModel(MainWindowViewModel viewModel, MainWindowModel model)
     {
-        _model = new MainWindowModel();
+        _model = model;
         _viewModel = viewModel;
 
-        LoginCommand = new RelayCommand(async () => await LoginAndUpdateView());
-        RegisterCommand = new RelayCommand(() => Register());
+        // Setting default state of radio buttons
+        teacherChecked = true;
+        studentChecked = false;
+
+        // LoginCommand = new RelayCommand(async () => await LoginAndUpdateView());
+        // RegisterCommand = new RelayCommand(() => Register());
     }
 
-    public async Task LoginAndUpdateView()
-    {
+    public void login () {
         bool loginSuccessful = _model.login(username, password) == 1;
 
-        if (loginSuccessful)
+        if (loginSuccessful) 
         {
-            if (_model.IsStudent)
+            if (_model.current_user is Student student)
             {
-                //_viewModel.CurrentView = _viewModel.StudentView;
-                Console.WriteLine("Student");
+                _viewModel.LinkedSubjects = new ObservableCollection<Subject>(student.enrolledSubjects);
+                        
+                // Now refresh the LinkedSubjects
+                _viewModel.LinkedSubjects.Clear();
+                foreach (var subj in student.enrolledSubjects)
+                {
+                    _viewModel.LinkedSubjects.Add(subj);
+                }
+
+                _viewModel.CurrentView = _viewModel.StudentView;
             }
-            else if (_model.IsTeacher)
+            else if (_model.current_user is Teacher teacher)
             {
-                Console.WriteLine("Teacher");
-            }
-            else
-            {
-                Console.WriteLine("Cannot find type of User");
+                teacher.subjects = _model.subjects
+                .Where(s => s.teacher.id == teacher.id) // or s.teacherId == teacher.id if you store just an ID
+                .ToList();
+
+                _viewModel.LinkedSubjects = new ObservableCollection<Subject>(teacher.subjects);
+                _viewModel.CurrentView = _viewModel.TeacherView;
             }
         }
+
+        _viewModel.AllSubjects = new ObservableCollection<Subject>(_model.subjects);
     }
 
-    public void Register()
-    {
-        Console.WriteLine(CurrentUserType);
-        CurrentUserType = UserType.Teacher;
-        bool IsTeacher = CurrentUserType == UserType.Teacher;
-        _model.register(username, password, IsTeacher);
+    public void register () {
+        _model.register(username, password, teacherChecked);
     }
 }

@@ -5,44 +5,49 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+
 
 namespace Assignment2.Models;
 
+
+public class ModelData {
+    public List<User> users { get; set; }
+    public List<Subject> subjects { get; set; }
+}
 
 public class MainWindowModel
 {
     private string filePath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "Assets", "user_data.json");
     private string data { get; set; }
-    public class ModelData {
-    public List<User> users { get; set; }
-    public List<Subject> subjects { get; set; }
- }
-    private User current_user { get; set; }
+    public User current_user { get; set; }
     public List<User> users { get; set; }
     public List<Subject> subjects { get; set; }
     private ModelData modelData { get; set; }
 
     public uint no_users;
     public uint no_subjects;
+    const int keySize = 64;
+    const int iterations = 350000;
 
-    public bool IsStudent => current_user is Student;
-    public bool IsTeacher => current_user is Teacher;
-
+    HashAlgorithmName hashAlgorithm = HashAlgorithmName.SHA512;
 
     private static readonly JsonSerializerOptions jsonOptions = new() {
         WriteIndented = true, // Pretty-print JSON
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        IncludeFields = true
+        IncludeFields = true,
+        ReferenceHandler = ReferenceHandler.Preserve
     };
 
     public MainWindowModel() {
         modelData = new ModelData();
+
         subjects = new List<Subject>();
         users = new List<User>();
-
         if (File.Exists(filePath)) {
             fetch_data();
         }
+        
     }
     public int register (string iuser, string ipass, bool isteacher) {
 
@@ -59,21 +64,22 @@ public class MainWindowModel
         }
 
         current_user = isteacher ? new Teacher() : new Student();
-        
+
         current_user.id = no_users;
         no_users++;
-
         current_user.username = iuser;
-        current_user.password = ipass;
+
+        byte[] salt;
+        string hashedPass = HashPassword(ipass, out salt);
+
+        current_user.password = hashedPass;
+        current_user.salt = Convert.ToHexString(salt); // Store salt as hex string
+
         users.Add(current_user);
 
         push_data();
 
         return 0;
-    }
-
-    public void logout () {
-        current_user = null;
     }
 
     public int login (string iuser, string ipass) {
@@ -89,17 +95,30 @@ public class MainWindowModel
 
         current_user = users.Find(user => user.username == iuser);
 
-        if(current_user != null && current_user.password == ipass) {
+
+        byte[] salt = Convert.FromHexString(current_user.salt); // Retrieve stored salt 
+        bool correctPass = VerifyPassword(ipass, current_user.password, salt);
+        
+        if(current_user != null && correctPass) {
             Console.WriteLine("Match");
             return 1;
         }
 
-        Console.WriteLine("Incorrect Password");
+        Console.WriteLine("Incorrect password");
         return 0;
     }
 
-    public int create_subject (string iname, string idetails, string iteacher) {
+    public void logout () {
+        current_user = null;
+    }
+
+    public int create_subject (string iname, string idetails) {
         fetch_data();
+        if (current_user is not Teacher) {
+            Console.WriteLine("You don't have the privilages");
+            return -1;
+        }
+        
         // Teacher current_teacher = (Teacher)users.Find(user => user.username == iteacher);
         Teacher current_teacher = (Teacher)current_user;
         if (current_teacher == null || current_teacher is not Teacher) return -1;
@@ -108,44 +127,55 @@ public class MainWindowModel
             Console.WriteLine("Subject already exists");
             return -1;
         }
- 
+
         if (current_teacher.subjects == null) {
-            current_teacher.subjects = new List<uint>();
+            current_teacher.subjects = new List<Subject>();
         }
- 
-        Subject subject = new Subject(iname, idetails, current_teacher.id);
+
+        Subject subject = new Subject(iname, idetails, current_teacher);
         subject.id = no_subjects;
         no_subjects++;
-        current_teacher.subjects.Add(subject.id);
+        current_teacher.subjects.Add(subject);
         subjects.Add(subject);
 
-        push_data();
- 
+       push_data();
+
         return 0;        
     }
- 
+
     public int enroll_subject (string iname) {
         fetch_data();
         current_user = users.Find(user => user.username == current_user.username);
         if (current_user == null || current_user is not Student) return -1;
         Subject isubject = subjects.Find(subject => subject.name == iname);
+
+
         if (isubject == null) {
             Console.WriteLine("No such subject");
             return -1;
         }
-        
+
         Student current_student = (Student)current_user;
-        uint? enrolled = current_student.enrolledSubjects.Find(id => id == isubject.id);
+
+        if (current_student.enrolledSubjects == null) current_student.enrolledSubjects = new List<Subject>();
+        
+        Subject? enrolled = current_student.enrolledSubjects.Find(sub => sub == isubject);
+
         if (enrolled != null) {
             Console.WriteLine ("Already enrolled in course");
             return -1;
         }
-        isubject.studentsEnrolled.Add(current_student.id);
-        if (current_student.enrolledSubjects == null) current_student.enrolledSubjects = new List<uint>();
 
-        current_student.enrolledSubjects.Add(isubject.id);
+         // Ensure that the studentsEnrolled list is initialized
+        if (isubject.studentsEnrolled == null) isubject.studentsEnrolled = new List<Student>();
+
+        isubject.studentsEnrolled.Add(current_student);
+
+        current_student.enrolledSubjects.Add(isubject);
+
 
         push_data();
+
 
         return 0;
     }
@@ -162,17 +192,23 @@ public class MainWindowModel
             return -1;
         }
 
+        if (rsubject.teacher.id != current_user.id)
+        {
+            Console.WriteLine("Don't you dare delete someone else's course");
+            return -1;
+        }
+
         subjects.Remove(rsubject);
 
         foreach (var user in users) {
             if (user is Teacher teacher && teacher.subjects != null) {
-                teacher.subjects.RemoveAll(s => s == rsubject.id); 
+                teacher.subjects.RemoveAll(s => s == rsubject); 
             }
         }
             
         foreach (var user in users) {
             if (user is Student student && student.enrolledSubjects != null) {
-                student.enrolledSubjects.RemoveAll(s => s == rsubject.id);
+                student.enrolledSubjects.RemoveAll(s => s == rsubject);
             }
         }  
 
@@ -180,7 +216,7 @@ public class MainWindowModel
 
         return 0;
     }
- 
+
     public int drop_subject (string iname) {
         fetch_data();
         if (current_user is not Student) {
@@ -196,21 +232,29 @@ public class MainWindowModel
             return -1;
         }
 
-        uint? enrollment = current_student.enrolledSubjects.Find(id => id == rsubject.id);
+        Subject? foundSub = current_student.enrolledSubjects.Find(sub => sub.id == rsubject.id);
 
-        if (enrollment == null) {
+        if (foundSub == null) {
             Console.WriteLine("You are not enrolled in such a course");
             return -1;
         }
 
-        current_student.enrolledSubjects.Remove(rsubject.id);
-        rsubject.studentsEnrolled.Remove(current_student.id);
+        foreach (Subject subj in current_student.enrolledSubjects) {
+            Console.WriteLine(subj.name);
+        }
+
+        current_student.enrolledSubjects.Remove(foundSub);
+        rsubject.studentsEnrolled.Remove(current_student);
+
+        foreach (Subject subj in current_student.enrolledSubjects) {
+            Console.WriteLine(subj.name);
+        }
 
         push_data();
 
         return 0;
     }
- 
+
     private void fetch_data () {
         User tmp; // Save current user otherwise fetch results in dangling pointer
         if (current_user is Teacher) tmp = new Teacher();
@@ -228,14 +272,29 @@ public class MainWindowModel
         } 
         current_user = tmp;
     }
- 
-    private void push_data () {
 
+    private void push_data () {
         modelData.users = users;
         modelData.subjects = subjects;
         data = JsonSerializer.Serialize(modelData, jsonOptions);
-
         File.WriteAllText(filePath, data);
-
     }
+
+    private string HashPassword (string password, out byte[] salt) {
+        salt = RandomNumberGenerator.GetBytes(keySize);
+        var hash = Rfc2898DeriveBytes.Pbkdf2(
+            Encoding.UTF8.GetBytes(password),
+            salt,
+            iterations,
+            hashAlgorithm,
+            keySize);
+        return Convert.ToHexString(hash);
+    }
+
+    private bool VerifyPassword(string password, string hash, byte[] salt)
+    {
+        var hashToCompare = Rfc2898DeriveBytes.Pbkdf2(password, salt, iterations, hashAlgorithm, keySize);
+        return CryptographicOperations.FixedTimeEquals(hashToCompare, Convert.FromHexString(hash));
+    }
+    
 }

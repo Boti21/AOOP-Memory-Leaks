@@ -1,45 +1,65 @@
 {
-  "users": [
-    {
-      "type": "teacher",
-      "subjects": [],
-      "id": 0,
-      "name": null,
-      "username": "Bjarne",
-      "password": "apparatus1234"
-    },
-    {
-      "type": "teacher",
-      "subjects": [],
-      "id": 1,
-      "name": null,
-      "username": "Fateme",
-      "password": "WHAAAT??"
-    },
-    {
-      "type": "student",
-      "enrolledSubjects": [],
-      "id": 2,
-      "name": null,
-      "username": "Balage",
-      "password": "tricking2000"
-    },
-    {
-      "type": "student",
-      "enrolledSubjects": [],
-      "id": 3,
-      "name": null,
-      "username": "Arturo",
-      "password": "pogacs4"
-    }
-  ],
-  "subjects": [
-    {
-      "name": "Dynamics",
-      "id": 1,
-      "details": "The other best course",
-      "teacher": 0,
-      "studentsEnrolled": []
-    }
-  ]
+  "$id": "1",
+  "users": {
+    "$id": "2",
+    "$values": [
+      {
+        "$id": "3",
+        "type": "teacher",
+        "subjects": {
+          "$id": "4",
+          "$values": []
+        },
+        "id": 0,
+        "name": null,
+        "username": "Bjarne",
+        "password": "A1D4A3F83E353F94EB44B973C3AB042E65A6651B04C4BFB13D5B20570522B992021FE9D1F7F1CBABEB69C2F6437862BF5267E1771F3E984F4E45EBB0985DAF5C",
+        "salt": "4225EC5393047CC310D87FDF04B4E3040DB2ABE87B19E3C90D989B15B267610343D1AEF51FF49EF0E2507D3074967355A1EF86642D7348B03082A31B2BC42949"
+      },
+      {
+        "$id": "5",
+        "type": "teacher",
+        "subjects": {
+          "$id": "6",
+          "$values": []
+        },
+        "id": 1,
+        "name": null,
+        "username": "Vida",
+        "password": "AAD94059A19E21226AC6E0DD26E0DC35BB958E633C48293802BA3BB6E02B02C557EE1AB171A0B611D0CDE0391AAF9D8B9A13D5DE61E16927003BD05C20859355",
+        "salt": "C88231482CD8D9FADEDB3A4724B190F65E3835FF10A12D94F40013BBD86F4737DD60B2B368DA829AF3C8201B234E103B5090DBFFD906950084CC7F2F52E4AE7C"
+      }
+    ]
+  },
+  "subjects": {
+    "$id": "7",
+    "$values": [
+      {
+        "$id": "8",
+        "name": "MATH1",
+        "id": 0,
+        "details": "The best course",
+        "teacher": {
+          "$id": "9",
+          "subjects": {
+            "$id": "10",
+            "$values": [
+              {
+                "$ref": "8"
+              }
+            ]
+          },
+          "id": 0,
+          "name": null,
+          "username": "Bjarne",
+          "password": "A1D4A3F83E353F94EB44B973C3AB042E65A6651B04C4BFB13D5B20570522B992021FE9D1F7F1CBABEB69C2F6437862BF5267E1771F3E984F4E45EBB0985DAF5C",
+          "salt": "4225EC5393047CC310D87FDF04B4E3040DB2ABE87B19E3C90D989B15B267610343D1AEF51FF49EF0E2507D3074967355A1EF86642D7348B03082A31B2BC42949"
+        },
+        "studentsEnrolled": {
+          "$id": "11",
+          "$values": []
+        }
+      }
+    ]
+  }
 }

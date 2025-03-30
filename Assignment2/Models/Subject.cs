@@ -7,15 +7,14 @@ public class Subject {
     public string name { get; set; }
     public uint id { get; set; }
     public string details { get; set; }
-    public uint teacher { get; set; }
-    public List<uint> studentsEnrolled { get; set; }
+    public Teacher teacher { get; set; }
+    public List<Student> studentsEnrolled { get; set; }
 
-    public Subject() {}
-
-    public Subject(string iname, string idetails, uint iteacher) {
+    public Subject() { }
+    public Subject(string iname, string idetails, Teacher iteacher) {
         this.name = iname;
         this.details = idetails;
         this.teacher = iteacher;
-        studentsEnrolled = new List<uint>();
+        studentsEnrolled = new List<Student>();
     }
 }

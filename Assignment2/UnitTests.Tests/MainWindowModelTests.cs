@@ -1,4 +1,5 @@
 ﻿using Assignment2.Models;
+using Assignment2.ViewModels;
 
 namespace UnitTests.Tests;
 
@@ -56,7 +57,7 @@ public class MainWindowModelTests : IDisposable
     {
         var Model = CreateModelInstance();
 
-        int result = Model.create_subject("Dynamics", "The other best course", "Bjarne");
+        int result = Model.create_subject("Dynamics", "The other best course");
 
         Assert.Equal(-1, result);
     }
@@ -88,7 +89,6 @@ public class MainWindowModelTests : IDisposable
     }
 
     [Fact]
-
     public void DropSubjectAsTeacher()
     {
         var Model = CreateModelInstance();
