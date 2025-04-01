@@ -24,7 +24,7 @@
     </PackageReference>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
     <PackageReference Include="Csvhelper" Version="33.0.1" />
-    <PackageReference Include="LiveCharts" Version="0.9.7" />
+    <!-- <PackageReference Include="LiveCharts" Version="0.9.7" /> -->
     <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc5.4" />
   </ItemGroup>
 
