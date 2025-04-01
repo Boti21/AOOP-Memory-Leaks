@@ -10,8 +10,9 @@
     </UserControl.DataContext>
     
     <lvc:CartesianChart
-        Series="{Binding Series}"
-        XAxes="{Binding XAxes}"
+        Series="{Binding SelectedGraph.Series}"
+        XAxes="{Binding SelectedGraph.XAxes}"
+        YAxes="{Binding SelectedGraph.YAxes}"
         LegendPosition="Right">
     </lvc:CartesianChart>    
     

@@ -1,4 +1,4 @@
-<Window xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Assignment3.ViewModels"
         xmlns:views="using:Assignment3.Views"
@@ -6,9 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Assignment3.Views.SelectionWindow"
-        x:DataType="vm:SelectionWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="Assignment3">
+        x:DataType="vm:SelectionWindowViewModel">
     
     <Design.DataContext>
         <vm:SelectionWindowViewModel/>
@@ -34,4 +32,4 @@
     </StackPanel> 
 
 
-</Window>
+</UserControl>

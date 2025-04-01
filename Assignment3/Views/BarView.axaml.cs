@@ -33,7 +33,7 @@ namespace Assignment3.Views
         
         private void SetSectionVisibility(ObservableCollection<dynamic> data)
         {
-            if (data != null)
+            if (data != null && data.Count > 0)
             {
                 if (data[0] is string)
                 {

@@ -14,7 +14,9 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <!-- <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/> -->
-
+    <Canvas>
+        <Button Content="Selection View" Command="{Binding EnterSelectionCommand}" IsVisible="{Binding SelectionButtonVisibility}" />
+        <ContentControl Content="{Binding CurrentView}" />
+    </Canvas>
 
 </Window>
