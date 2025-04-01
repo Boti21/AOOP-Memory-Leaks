@@ -11,7 +11,7 @@ namespace Assignment3.Views
     {
         public BarView()
         {
-            SelectionWindowViewModel viewModel = new SelectionWindowViewModel();
+            // SelectionWindowViewModel viewModel = new SelectionWindowViewModel();
             
             InitializeComponent();
             
@@ -23,7 +23,7 @@ namespace Assignment3.Views
             //     "in a new Bugatti"
             // };
             
-            SetSectionVisibility(viewModel.SelectedData);
+            // SetSectionVisibility(viewModel.SelectedData);
         }
 
         private void InitializeComponent()

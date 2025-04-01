@@ -18,7 +18,7 @@ public class BarGraphViewModel : GraphViewModel
 {
     public override string GraphType => "Bar";
     private ObservableCollection<ISeries> series = 
-        new ObservableCollection<ISeries> { new ColumnSeries<double> { Values = new ObservableCollection<double> { 0, 0, 0 } } };
+        new ObservableCollection<ISeries> { new ColumnSeries<double> { Values = new ObservableCollection<double> { 1, 2, 3 } } };
     public override ObservableCollection<ISeries> Series
     {
         get => series;

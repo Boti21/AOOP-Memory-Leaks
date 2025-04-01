@@ -9,6 +9,5 @@ public partial class SelectionWindow : UserControl
     public SelectionWindow()
     {
         InitializeComponent();
-        DataContext = new SelectionWindowViewModel();
     }
 }

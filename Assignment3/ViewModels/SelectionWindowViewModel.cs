@@ -4,6 +4,7 @@ using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -23,7 +24,7 @@ namespace Assignment3.ViewModels
         private string graphType = "Bar";
         [ObservableProperty]
         private GraphViewModel? selectedGraph;
-        public ISeries[] Series { get; set; } =
+        public ObservableCollection<ISeries> Series { get; set; } =
         [
             new ColumnSeries<double>
             {
@@ -36,7 +37,7 @@ namespace Assignment3.ViewModels
                 Values = [3, 1, 6]
             }
         ];
-        public Axis[] XAxes { get; set; } =
+        public ObservableCollection<Axis> XAxes { get; set; } =
         [
             new Axis
             {
@@ -50,10 +51,25 @@ namespace Assignment3.ViewModels
                 MinStep = 1 
             }
         ];
+        public ObservableCollection<Axis> YAxes { get; set; } =
+        [
+            new Axis
+            {
+                Name = "Y-Axis"
+            }
+        ];
         public SelectionWindowViewModel()
         {
             AddHeaders();
             CreateGraph();
+            if (SelectedGraph is null)
+            {
+                SelectedGraph = new BarGraphViewModel();
+            }
+            else if (SelectedGraph != null)
+            {
+                OnPropertyChanged(nameof(SelectedGraph));
+            }
         }
 
         [RelayCommand]
@@ -66,6 +82,10 @@ namespace Assignment3.ViewModels
                 "Line" => new LineGraphViewModel(),
                 "Scatter" => new ScatterGraphViewModel()
             };
+            SelectedGraph.Series = Series;
+            SelectedGraph.XAxes = XAxes;
+            SelectedGraph.YAxes = YAxes;
+
             OnPropertyChanged(nameof(SelectedGraph));
         }
         private void AddHeaders()

@@ -23,16 +23,13 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private bool selectionButtonVisibility = true;
     public SelectionWindow SelectionWindow { get; private set; }
+    public SelectionWindowViewModel SelectionWindowViewModel { get; private set; }
     public ObservableCollection<GraphViewModel> Graphs { get; } = new();
-    [ObservableProperty]
-    private GraphViewModel selectedGraph;
-    private SelectionWindowViewModel selectionView;
 
     public MainWindowViewModel()
     {
-        selectedGraph = new BarGraphViewModel();
-
-        SelectionWindow = new SelectionWindow() { DataContext = this };
+        SelectionWindowViewModel = new SelectionWindowViewModel();
+        SelectionWindow = new SelectionWindow { DataContext = SelectionWindowViewModel };
     }
 
     [RelayCommand]

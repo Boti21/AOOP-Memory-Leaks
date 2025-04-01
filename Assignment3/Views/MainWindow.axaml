@@ -15,7 +15,7 @@
     </Design.DataContext>
 
     <Canvas>
-        <Button Content="Selection View" Command="{Binding EnterSelectionCommand}" IsVisible="{Binding SelectionButtonVisibility}" />
+        <Button Content="Selection View" Command="{Binding EnterSelectionCommand}" IsVisible="{Binding SelectionButtonVisibility}"/>
         <ContentControl Content="{Binding CurrentView}" />
     </Canvas>
 

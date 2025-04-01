@@ -12,8 +12,8 @@
         <vm:SelectionWindowViewModel/>
     </Design.DataContext>
     
-    <StackPanel Orientation="Horizontal">
-        <TabControl Margin="5">
+    <Grid ColumnDefinitions="Auto, *">
+        <TabControl Margin="5" Grid.Row="0">
             <TabItem Header="Bar">
                 <views:BarView DataContext="{Binding}"/>
             </TabItem>
@@ -28,8 +28,8 @@
             </TabItem>
         </TabControl>
         <!-- <TextBlock Text="Hellooo??" FontSize="200"/> -->
-        <views:DesignView/>
-    </StackPanel> 
+        <views:DesignView DataContext="{Binding SelectedGraph}" Grid.Column="1" Width="500"/>
+    </Grid> 
 
 
 </UserControl>
