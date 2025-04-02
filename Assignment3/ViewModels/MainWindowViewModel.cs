@@ -23,7 +23,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private UserControl currentView;
     [ObservableProperty]
-    private bool selectionButtonVisibility = true;
+    private bool mainWindowVisibility = true;
     public SelectionWindow SelectionWindow { get; private set; }
     public SelectionWindowViewModel SelectionWindowViewModel { get; private set; }
     public ObservableCollection<GraphViewModel> Graphs { get; } = new();
@@ -37,7 +37,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void EnterSelection()
     {
-        SelectionButtonVisibility = false;
+        MainWindowVisibility = false;
         mainView = CurrentView;
         CurrentView = SelectionWindow;
     }

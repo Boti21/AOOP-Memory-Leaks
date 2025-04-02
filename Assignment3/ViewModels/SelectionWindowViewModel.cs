@@ -108,7 +108,7 @@ namespace Assignment3.ViewModels
             {
                 mainWindowViewModel.Graphs.Add(SelectedGraph);
                 mainWindowViewModel.CurrentView = mainWindowViewModel.mainView;
-                mainWindowViewModel.SelectionButtonVisibility = true;
+                mainWindowViewModel.MainWindowVisibility = true;
             }
         }
     }

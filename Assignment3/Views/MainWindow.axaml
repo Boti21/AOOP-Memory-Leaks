@@ -15,8 +15,8 @@
     </Design.DataContext>
 
     <Canvas>
-        <Button Content="Selection View" Command="{Binding EnterSelectionCommand}" IsVisible="{Binding SelectionButtonVisibility}" />
-        <ItemsControl ItemsSource="{Binding Graphs}" Canvas.Top="50" Canvas.Right="50">
+        <Button Content="Selection View" Command="{Binding EnterSelectionCommand}" IsVisible="{Binding MainWindowVisibility}" />
+        <ItemsControl ItemsSource="{Binding Graphs}" Canvas.Top="50" Canvas.Right="50" IsVisible="{Binding MainWindowVisibility}" >
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <lvc:CartesianChart 
