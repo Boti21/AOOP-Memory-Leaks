@@ -20,7 +20,6 @@ public abstract partial class GraphViewModel : ViewModelBase
     private string selectedXSource = string.Empty;
     [ObservableProperty]
     private string selectedYSource = string.Empty;
-    public abstract string GraphType { get; }
     public abstract ObservableCollection<ISeries> Series { get; set; } //General Data
     public abstract LabelVisual Title { get; set; } //General Title
     public abstract ObservableCollection<Axis> XAxes { get; set; } //General X-axis

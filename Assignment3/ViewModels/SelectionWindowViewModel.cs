@@ -1,3 +1,4 @@
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LiveChartsCore;
@@ -12,52 +13,40 @@ namespace Assignment3.ViewModels
 {
     public partial class SelectionWindowViewModel : ViewModelBase
     {
+        private bool CartesianVisible = true;
+        private bool PieVisible = false;
+        private TabItem selectedTab;
+        public TabItem SelectedTab
+        {
+            get => selectedTab;
+            set
+            {
+                if (selectedTab != value)
+                {
+                    selectedTab = value;
+                    OnPropertyChanged(nameof(SelectedTab));
+                    GraphType = selectedTab.Header.ToString();
+                }
+            }
+        }
         [ObservableProperty]
         private ObservableCollection<string> headers = new();
-        [ObservableProperty]
-        private string xHeader = string.Empty;
-        [ObservableProperty]
-        private string yHeader = string.Empty;
-        [ObservableProperty]
-        public ObservableCollection<dynamic> selectedData = new();
-        [ObservableProperty]
         private string graphType = "Bar";
+        public string GraphType
+        {
+            get => graphType;
+            set
+            {
+                if (graphType != value)
+                {
+                    graphType = value;
+                    OnPropertyChanged(nameof(GraphType));
+                    CreateGraph();
+                }
+            }
+        }
         [ObservableProperty]
         private GraphViewModel? selectedGraph;
-        public ObservableCollection<ISeries> Series { get; set; } =
-        [
-            new ColumnSeries<double>
-            {
-                Name = "Mary",
-                Values = [2, 5, 4]
-            },
-            new ColumnSeries<double>
-            {
-                Name = "Ana",
-                Values = [3, 1, 6]
-            }
-        ];
-        public ObservableCollection<Axis> XAxes { get; set; } =
-        [
-            new Axis
-            {
-                Labels = ["Category 1", "Category 2", "Category 3"],
-                LabelsRotation = 0,
-                SeparatorsPaint = new SolidColorPaint(new SKColor(200, 200, 200)),
-                SeparatorsAtCenter = false,
-                TicksPaint = new SolidColorPaint(new SKColor(35, 35, 35)),
-                TicksAtCenter = true,
-                ForceStepToMin = true, 
-                MinStep = 1 
-            }
-        ];
-        public ObservableCollection<Axis> YAxes { get; set; } =
-        [
-            new Axis
-            {
-                Name = "Y-Axis"
-            }
-        ];
         public SelectionWindowViewModel()
         {
             AddHeaders();
@@ -75,6 +64,7 @@ namespace Assignment3.ViewModels
         [RelayCommand]
         private void CreateGraph()
         {
+            Console.WriteLine($"Creating Graph: {GraphType}");
             SelectedGraph = GraphType switch
             {
                 "Bar" => new BarGraphViewModel(),
@@ -82,9 +72,23 @@ namespace Assignment3.ViewModels
                 "Line" => new LineGraphViewModel(),
                 "Scatter" => new ScatterGraphViewModel()
             };
-            SelectedGraph.Series = Series;
-            SelectedGraph.XAxes = XAxes;
-            SelectedGraph.YAxes = YAxes;
+
+            SelectedGraph.Series[0].Values = new ObservableCollection<double> { 1, 2, 3 };
+            SelectedGraph.Series[0].Name = "NewTest";
+            SelectedGraph.Title.Text = $"{GraphType} Chart";
+            SelectedGraph.XAxes[0].Name = "X-Axis";
+            SelectedGraph.YAxes[0].Name = "Y-Axis";
+
+            if (GraphType == "Pie")
+            {
+                CartesianVisible = false;
+                PieVisible = true;
+            }
+            else
+            {
+                CartesianVisible = true;
+                PieVisible = false;
+            }
 
             OnPropertyChanged(nameof(SelectedGraph));
         }

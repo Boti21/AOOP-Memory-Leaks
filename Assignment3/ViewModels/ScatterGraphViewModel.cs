@@ -16,9 +16,7 @@ namespace Assignment3.ViewModels;
 
 public class ScatterGraphViewModel : GraphViewModel
 {
-    public override string GraphType => "Scatter";
-    private ObservableCollection<ISeries> series = 
-        new ObservableCollection<ISeries> { new ScatterSeries<double> { Values = new ObservableCollection<double> { 0, 0, 0 } } };
+    private ObservableCollection<ISeries> series;
     public override ObservableCollection<ISeries> Series
     {
         get => series;
@@ -31,7 +29,37 @@ public class ScatterGraphViewModel : GraphViewModel
             }
         }
     }
-    public override LabelVisual Title { get; set; } = new() { Text = "Scatter Chart" };
-    public override ObservableCollection<Axis> XAxes { get; set; } = new ObservableCollection<Axis> { new Axis { Name = "X-Axis" } };
-    public override ObservableCollection<Axis> YAxes { get; set; } = new ObservableCollection<Axis> { new Axis { Name = "Y-Axis" } };
+    public override LabelVisual Title { get; set; }
+    public override ObservableCollection<Axis> XAxes { get; set; }
+    public override ObservableCollection<Axis> YAxes { get; set; }
+
+    public ScatterGraphViewModel()
+    {
+        Series = new ObservableCollection<ISeries>
+            {
+                new ScatterSeries<double>
+                {
+                    Values = new ObservableCollection<double>(),
+                    Name = string.Empty
+                }
+            };
+        Title = new LabelVisual
+            {
+                Text = string.Empty
+            };
+        XAxes = new ObservableCollection<Axis>
+            {
+                new Axis
+                {
+                    Name = string.Empty
+                } 
+            };
+        YAxes = new ObservableCollection<Axis>
+            {
+                new Axis
+                {
+                    Name = string.Empty
+                }
+            };
+    }
 }

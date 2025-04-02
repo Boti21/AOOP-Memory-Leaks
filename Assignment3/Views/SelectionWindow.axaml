@@ -13,7 +13,7 @@
     </Design.DataContext>
     
     <Grid ColumnDefinitions="Auto, *">
-        <TabControl Margin="5" Grid.Row="0">
+        <TabControl Margin="5" Grid.Row="0" SelectedItem="{Binding SelectedTab, Mode=TwoWay}">
             <TabItem Header="Bar">
                 <views:BarView DataContext="{Binding}"/>
             </TabItem>
@@ -28,7 +28,7 @@
             </TabItem>
         </TabControl>
         <!-- <TextBlock Text="Hellooo??" FontSize="200"/> -->
-        <views:DesignView DataContext="{Binding SelectedGraph}" Grid.Column="1" Width="500"/>
+        <views:DesignView DataContext="{Binding SelectedGraph}" Grid.Column="1" Width="700"/>
     </Grid> 
 
 

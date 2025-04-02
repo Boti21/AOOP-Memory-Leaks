@@ -8,11 +8,19 @@
     <UserControl.DataContext>
         <vms:SelectionWindowViewModel/>
     </UserControl.DataContext>
+
+    <UserControl.Resources>
+
+    </UserControl.Resources>
     
-    <lvc:CartesianChart
-        Series="{Binding Series}"
-        XAxes="{Binding XAxes}"
-        LegendPosition="Right">
-    </lvc:CartesianChart>    
-    
+    <Grid>
+        <lvc:CartesianChart
+            IsVisible="{Binding CartesianVisible}"
+            Series="{Binding Series}"
+            Title="{Binding Title}"
+            XAxes="{Binding XAxes}"
+            YAxes="{Binding YAxes}"
+            LegendPosition="Right">
+        </lvc:CartesianChart>
+    </Grid>
 </UserControl>

@@ -16,9 +16,7 @@ namespace Assignment3.ViewModels;
 
 public class BarGraphViewModel : GraphViewModel
 {
-    public override string GraphType => "Bar";
-    private ObservableCollection<ISeries> series = 
-        new ObservableCollection<ISeries> { new ColumnSeries<double> { Values = new ObservableCollection<double> { 1, 2, 3 } } };
+    private ObservableCollection<ISeries> series;
     public override ObservableCollection<ISeries> Series
     {
         get => series;
@@ -31,7 +29,37 @@ public class BarGraphViewModel : GraphViewModel
             }
         }
     }
-    public override LabelVisual Title { get; set; } = new() { Text = "Bar Chart" };
-    public override ObservableCollection<Axis> XAxes { get; set; } = new ObservableCollection<Axis> { new Axis { Name = "X-Axis" } };
-    public override ObservableCollection<Axis> YAxes { get; set; } = new ObservableCollection<Axis> { new Axis { Name = "Y-Axis" } };
+    public override LabelVisual Title { get; set; }
+    public override ObservableCollection<Axis> XAxes { get; set; }
+    public override ObservableCollection<Axis> YAxes { get; set; }
+
+    public BarGraphViewModel()
+    {
+        Series = new ObservableCollection<ISeries>
+            {
+                new ColumnSeries<double>
+                {
+                    Values = new ObservableCollection<double>(),
+                    Name = string.Empty
+                }
+            };
+        Title = new LabelVisual
+            {
+                Text = string.Empty
+            };
+        XAxes = new ObservableCollection<Axis>
+            {
+                new Axis
+                {
+                    Name = string.Empty
+                } 
+            };
+        YAxes = new ObservableCollection<Axis>
+            {
+                new Axis
+                {
+                    Name = string.Empty
+                }
+            };
+    }
 }
