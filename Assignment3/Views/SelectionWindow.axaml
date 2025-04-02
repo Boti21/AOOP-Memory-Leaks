@@ -12,7 +12,7 @@
         <vm:SelectionWindowViewModel/>
     </Design.DataContext>
     
-    <Grid ColumnDefinitions="Auto, *">
+    <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, *">
         <TabControl Margin="5" Grid.Row="0" SelectedItem="{Binding SelectedTab, Mode=TwoWay}">
             <TabItem Header="Bar">
                 <views:BarView DataContext="{Binding}"/>
@@ -29,6 +29,7 @@
         </TabControl>
         <!-- <TextBlock Text="Hellooo??" FontSize="200"/> -->
         <views:DesignView DataContext="{Binding SelectedGraph}" Grid.Column="1" Width="700"/>
+        <Button Content="Add Graph" Command="{Binding AddGraphCommand}" Grid.Row="1" Grid.Column="1" />
     </Grid> 
 
 

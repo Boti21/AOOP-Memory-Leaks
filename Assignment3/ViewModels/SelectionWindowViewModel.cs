@@ -13,6 +13,7 @@ namespace Assignment3.ViewModels
 {
     public partial class SelectionWindowViewModel : ViewModelBase
     {
+        private MainWindowViewModel mainWindowViewModel;
         private bool CartesianVisible = true;
         private bool PieVisible = false;
         private TabItem selectedTab;
@@ -47,8 +48,9 @@ namespace Assignment3.ViewModels
         }
         [ObservableProperty]
         private GraphViewModel? selectedGraph;
-        public SelectionWindowViewModel()
+        public SelectionWindowViewModel(MainWindowViewModel mainWindowViewModel)
         {
+            this.mainWindowViewModel = mainWindowViewModel;
             AddHeaders();
             CreateGraph();
             if (SelectedGraph is null)
@@ -64,7 +66,6 @@ namespace Assignment3.ViewModels
         [RelayCommand]
         private void CreateGraph()
         {
-            Console.WriteLine($"Creating Graph: {GraphType}");
             SelectedGraph = GraphType switch
             {
                 "Bar" => new BarGraphViewModel(),
@@ -99,6 +100,16 @@ namespace Assignment3.ViewModels
                 "Country", "Year", "Food Category", "Total Waste (Tons)", "Economic Loss (Million $)",
                 "Avg Waste per Capita (Kg)", "Population (Million)", "Household Waste (%)"
             };
+        }
+        [RelayCommand]
+        private void AddGraph()
+        {
+            if (SelectedGraph != null)
+            {
+                mainWindowViewModel.Graphs.Add(SelectedGraph);
+                mainWindowViewModel.CurrentView = mainWindowViewModel.mainView;
+                mainWindowViewModel.SelectionButtonVisibility = true;
+            }
         }
     }
 }

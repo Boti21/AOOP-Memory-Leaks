@@ -15,7 +15,21 @@
     </Design.DataContext>
 
     <Canvas>
-        <Button Content="Selection View" Command="{Binding EnterSelectionCommand}" IsVisible="{Binding SelectionButtonVisibility}"/>
+        <Button Content="Selection View" Command="{Binding EnterSelectionCommand}" IsVisible="{Binding SelectionButtonVisibility}" />
+        <ItemsControl ItemsSource="{Binding Graphs}" Canvas.Top="50" Canvas.Right="50">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <lvc:CartesianChart 
+                        Series="{Binding Series}"
+                        Title="{Binding Title}"
+                        XAxes="{Binding XAxes}"
+                        YAxes="{Binding YAxes}"
+                        Height="300"
+                        Width="300">
+                    </lvc:CartesianChart>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl> 
         <ContentControl Content="{Binding CurrentView}" />
     </Canvas>
 

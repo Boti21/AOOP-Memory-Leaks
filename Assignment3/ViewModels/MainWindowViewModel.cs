@@ -11,6 +11,7 @@ using LiveChartsCore.SkiaSharpView.Extensions;
 using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.VisualElements;
 using SkiaSharp;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -18,6 +19,7 @@ namespace Assignment3.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
+    public UserControl mainView { get; set; } 
     [ObservableProperty]
     private UserControl currentView;
     [ObservableProperty]
@@ -28,7 +30,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public MainWindowViewModel()
     {
-        SelectionWindowViewModel = new SelectionWindowViewModel();
+        SelectionWindowViewModel = new SelectionWindowViewModel(this);
         SelectionWindow = new SelectionWindow { DataContext = SelectionWindowViewModel };
     }
 
@@ -36,23 +38,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private void EnterSelection()
     {
         SelectionButtonVisibility = false;
+        mainView = CurrentView;
         CurrentView = SelectionWindow;
     }
-
-    [RelayCommand]
-    private void AddGraph(GraphViewModel graph)
-    {
-        if (graph != null)
-        {
-            Graphs.Add(graph);
-        }
-    }
-
-    [RelayCommand]
-    private void UpdateGraph()
-    {
-        
-    }
-
-
 }

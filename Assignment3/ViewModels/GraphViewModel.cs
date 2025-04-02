@@ -16,12 +16,8 @@ namespace Assignment3.ViewModels;
 
 public abstract partial class GraphViewModel : ViewModelBase
 {
-    [ObservableProperty]
-    private string selectedXSource = string.Empty;
-    [ObservableProperty]
-    private string selectedYSource = string.Empty;
-    public abstract ObservableCollection<ISeries> Series { get; set; } //General Data
-    public abstract LabelVisual Title { get; set; } //General Title
-    public abstract ObservableCollection<Axis> XAxes { get; set; } //General X-axis
-    public abstract ObservableCollection<Axis> YAxes { get; set; } //General Y-axis
+    public virtual ObservableCollection<ISeries> Series { get; set; } //General Data
+    public virtual LabelVisual Title { get; set; } //General Title
+    public virtual ObservableCollection<Axis> XAxes { get; set; } //General X-axis
+    public virtual ObservableCollection<Axis> YAxes { get; set; } //General Y-axis
 }

@@ -4,11 +4,6 @@
              xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
              xmlns:vms="using:Assignment3.ViewModels"
              x:CompileBindings="False">
-             
-    <UserControl.DataContext>
-        <vms:SelectionWindowViewModel/>
-    </UserControl.DataContext>
-
     <UserControl.Resources>
 
     </UserControl.Resources>
