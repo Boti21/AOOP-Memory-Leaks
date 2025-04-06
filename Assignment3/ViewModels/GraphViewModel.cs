@@ -35,6 +35,9 @@ public abstract partial class GraphViewModel : ViewModelBase
     public virtual LabelVisual Title { get; set; } //General Title
     public virtual ObservableCollection<Axis> XAxes { get; set; } //General X-axis
     public virtual ObservableCollection<Axis> YAxes { get; set; } //General Y-axis
-    public bool CartesianVisible = true;
-    public bool PieVisible = false;
+
+    public bool IsPie { get; set; }
+    public bool IsCart { get; set; }
+    // public bool CartesianVisible = true;
+    // public bool PieVisible = false;
 }

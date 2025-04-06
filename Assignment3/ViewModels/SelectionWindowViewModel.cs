@@ -85,17 +85,28 @@ namespace Assignment3.ViewModels
             SelectedGraph.PieSeries.Add(new PieSeries<double> { Values = new ObservableCollection<double> { 10 }, Name = "This" });
             SelectedGraph.PieSeries.Add(new PieSeries<double> { Values = new ObservableCollection<double> { 7 }, Name = "Was" });
             SelectedGraph.PieSeries.Add(new PieSeries<double> { Values = new ObservableCollection<double> { 14 }, Name = "Annoying" });
-            
-            if (GraphType == "Pie")
+
+            if (SelectedGraph is PieGraphViewModel)
             {
-                SelectedGraph.PieVisible = true;
-                SelectedGraph.CartesianVisible = false;
+                SelectedGraph.IsPie = true;
+                SelectedGraph.IsCart = false;
             }
             else
             {
-                SelectedGraph.PieVisible = false;
-                SelectedGraph.CartesianVisible = true;
+                SelectedGraph.IsPie = false;
+                SelectedGraph.IsCart = true;
             }
+            
+            // if (GraphType == "Pie")
+            // {
+            //     SelectedGraph.PieVisible = true;
+            //     SelectedGraph.CartesianVisible = false;
+            // }
+            // else
+            // {
+            //     SelectedGraph.PieVisible = false;
+            //     SelectedGraph.CartesianVisible = true;
+            // }
 
             OnPropertyChanged(nameof(SelectedGraph));
         }
