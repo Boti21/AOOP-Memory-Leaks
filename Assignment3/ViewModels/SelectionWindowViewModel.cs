@@ -14,8 +14,8 @@ namespace Assignment3.ViewModels
     public partial class SelectionWindowViewModel : ViewModelBase
     {
         private MainWindowViewModel mainWindowViewModel;
-        private bool CartesianVisible = true;
-        private bool PieVisible = false;
+        public bool CartesianVisible = true;
+        public bool PieVisible = false;
         private TabItem selectedTab;
         public TabItem SelectedTab
         {
@@ -79,16 +79,22 @@ namespace Assignment3.ViewModels
             SelectedGraph.Title.Text = $"{GraphType} Chart";
             SelectedGraph.XAxes[0].Name = "X-Axis";
             SelectedGraph.YAxes[0].Name = "Y-Axis";
-
+            
+            SelectedGraph.PieSeries.Clear();
+            
+            SelectedGraph.PieSeries.Add(new PieSeries<double> { Values = new ObservableCollection<double> { 10 }, Name = "This" });
+            SelectedGraph.PieSeries.Add(new PieSeries<double> { Values = new ObservableCollection<double> { 7 }, Name = "Was" });
+            SelectedGraph.PieSeries.Add(new PieSeries<double> { Values = new ObservableCollection<double> { 14 }, Name = "Annoying" });
+            
             if (GraphType == "Pie")
             {
-                CartesianVisible = false;
-                PieVisible = true;
+                SelectedGraph.PieVisible = true;
+                SelectedGraph.CartesianVisible = false;
             }
             else
             {
-                CartesianVisible = true;
-                PieVisible = false;
+                SelectedGraph.PieVisible = false;
+                SelectedGraph.CartesianVisible = true;
             }
 
             OnPropertyChanged(nameof(SelectedGraph));

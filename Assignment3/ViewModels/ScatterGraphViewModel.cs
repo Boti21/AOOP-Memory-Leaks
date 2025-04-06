@@ -43,6 +43,14 @@ public class ScatterGraphViewModel : GraphViewModel
                     Name = string.Empty
                 }
             };
+        PieSeries = new ObservableCollection<ISeries>
+        {
+            new PieSeries<double>()
+            {
+                Values = new ObservableCollection<double>(),
+                Name = string.Empty
+            }
+        };
         Title = new LabelVisual
             {
                 Text = string.Empty

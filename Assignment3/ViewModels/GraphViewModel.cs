@@ -11,13 +11,30 @@ using LiveChartsCore.SkiaSharpView.VisualElements;
 using SkiaSharp;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using LiveChartsCore.Kernel.Sketches;
 
 namespace Assignment3.ViewModels;
 
 public abstract partial class GraphViewModel : ViewModelBase
 {
     public virtual ObservableCollection<ISeries> Series { get; set; } //General Data
+
+    private ObservableCollection<ISeries> pieSeries;
+    public virtual ObservableCollection<ISeries> PieSeries
+    {
+        get => pieSeries;
+        set
+        {
+            if (pieSeries != value)
+            {
+                pieSeries = value;
+                OnPropertyChanged(nameof(PieSeries));
+            }
+        }
+    }
     public virtual LabelVisual Title { get; set; } //General Title
     public virtual ObservableCollection<Axis> XAxes { get; set; } //General X-axis
     public virtual ObservableCollection<Axis> YAxes { get; set; } //General Y-axis
+    public bool CartesianVisible = true;
+    public bool PieVisible = false;
 }

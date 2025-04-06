@@ -36,6 +36,14 @@ public class PieGraphViewModel : GraphViewModel
     public PieGraphViewModel()
     {
         Series = new ObservableCollection<ISeries>
+        {
+            new ScatterSeries<double>
+            {
+                Values = new ObservableCollection<double>(),
+                Name = string.Empty
+            }
+        };
+        PieSeries = new ObservableCollection<ISeries>
             {
                 new PieSeries<double>
                 {

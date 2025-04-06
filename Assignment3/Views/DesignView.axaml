@@ -3,19 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
              xmlns:vms="using:Assignment3.ViewModels"
-             x:CompileBindings="False">
+             x:CompileBindings="True">
     <UserControl.Resources>
 
     </UserControl.Resources>
     
-    <Grid>
-        <lvc:CartesianChart
-            IsVisible="{Binding CartesianVisible}"
-            Series="{Binding Series}"
-            Title="{Binding Title}"
-            XAxes="{Binding XAxes}"
-            YAxes="{Binding YAxes}"
-            LegendPosition="Right">
-        </lvc:CartesianChart>
+    <Grid x:Name="Chart">
     </Grid>
 </UserControl>
