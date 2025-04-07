@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using CsvHelper.Configuration.Attributes;
 
 namespace Assignment3.Models;
@@ -13,4 +14,9 @@ public class Record
     [Index(5)] public decimal AvgWastePerCapita { get; set; }
     [Index(6)] public decimal Population { get; set; }
     [Index(7)] public decimal HouseholdWaste { get; set; }
+
+    public IEnumerable<decimal> GetDecimalValuesAsCollection()
+    {
+       return [TotalWaste, EconomicLoss, AvgWastePerCapita, Population, HouseholdWaste];
+    }
 }

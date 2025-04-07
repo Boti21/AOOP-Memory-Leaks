@@ -14,6 +14,7 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Assignment3.Models;
 
 namespace Assignment3.ViewModels;
 
@@ -32,6 +33,12 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         SelectionWindowViewModel = new SelectionWindowViewModel(this);
         SelectionWindow = new SelectionWindow { DataContext = SelectionWindowViewModel };
+
+        // Testing
+        var dataset = new Dataset();
+        dataset.GetRowOfCountryInCatInYear(dataset.Countries[0], dataset.Categories[0], dataset.Years[0]);
+        dataset.GetCountryTrendInCat(dataset.Countries[0], dataset.Header[3]);
+        // Until here
     }
 
     [RelayCommand]
