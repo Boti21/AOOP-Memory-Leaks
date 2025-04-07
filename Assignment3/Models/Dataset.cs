@@ -44,18 +44,21 @@ public class Dataset
         {
             NewLine = Environment.NewLine,
         };
-        var csv = new CsvReader(new StreamReader("../../../Assets/global_food_wastage_dataset.csv"), config);
+        var basePath = AppContext.BaseDirectory;
+        var csvPath = Path.Combine(basePath, @"../../../Assets/global_food_wastage_dataset.csv");
+
+        var csv = new CsvReader(new StreamReader(csvPath), config);
         csv.Read();
         csv.ReadHeader();
         Header = csv.HeaderRecord;
         
         csv.Dispose();
-        csv = new CsvReader(new StreamReader("../../../Assets/global_food_wastage_dataset.csv"), config);
+        csv = new CsvReader(new StreamReader(csvPath), config);
         csv.Context.RegisterClassMap<RecordMap>();
         Records = csv.GetRecords<Record>().ToList();
         
         csv.Dispose();
-        csv = new CsvReader(new StreamReader("../../../Assets/global_food_wastage_dataset.csv"), config);
+        csv = new CsvReader(new StreamReader(csvPath), config);
         RecordsList = csv.GetRecords<dynamic>().ToList();
 
         Categories = GetColumn(Header[2]).Distinct().Cast<string>().ToArray();
