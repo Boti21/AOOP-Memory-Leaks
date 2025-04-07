@@ -38,6 +38,4 @@ public abstract partial class GraphViewModel : ViewModelBase
 
     public bool IsPie { get; set; }
     public bool IsCart { get; set; }
-    // public bool CartesianVisible = true;
-    // public bool PieVisible = false;
 }
