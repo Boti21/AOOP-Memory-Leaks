@@ -15,32 +15,51 @@
     </Design.DataContext>
 
     <Canvas>
-        <Button Content="Selection View" Command="{Binding EnterSelectionCommand}" IsVisible="{Binding MainWindowVisibility}" />
-        <ItemsControl ItemsSource="{Binding Graphs}" Canvas.Top="50" Canvas.Right="50" IsVisible="{Binding MainWindowVisibility}" >
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <lvc:CartesianChart 
-                            IsVisible="{Binding IsCart}"
-                            Series="{Binding Series}"
-                            Title="{Binding Title}"
-                            XAxes="{Binding XAxes}"
-                            YAxes="{Binding YAxes}"
-                            Height="300"
-                            Width="300">
-                        </lvc:CartesianChart>
-                        
-                        <lvc:PieChart
-                            IsVisible="{Binding IsPie}"
-                            Series="{Binding PieSeries}"
-                            Height="300"
-                            Width="300">
-                        </lvc:PieChart>
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl> 
+        <Button Command="{Binding EnterSelectionCommand}" 
+                IsVisible="{Binding MainWindowVisibility}" 
+                Height="70"
+                Width="120">
+                <TextBlock 
+                    Text="DESIGN" 
+                    FontWeight="Bold" 
+                    FontSize="18" 
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"/>
+        </Button>
+
+        <Border Width="900" Canvas.Top="50" Canvas.Right="50" IsVisible="{Binding MainWindowVisibility}">
+            <ItemsControl ItemsSource="{Binding Graphs}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate> 
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <lvc:CartesianChart 
+                                IsVisible="{Binding IsCart}"
+                                Series="{Binding Series}"
+                                Title="{Binding Title}"
+                                XAxes="{Binding XAxes}"
+                                YAxes="{Binding YAxes}"
+                                Height="300"
+                                Width="300">
+                            </lvc:CartesianChart>
+                            
+                            <lvc:PieChart
+                                IsVisible="{Binding IsPie}"
+                                Series="{Binding PieSeries}"
+                                Height="300"
+                                Width="300">
+                            </lvc:PieChart>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
         <ContentControl Content="{Binding CurrentView}" />
     </Canvas>
+    
 
 </Window>
