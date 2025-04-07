@@ -133,7 +133,8 @@ namespace Assignment3.ViewModels
             };
             */
             //Headers = new ObservableCollection<string>(Dataset.GetTotalWasteInYear(Dataset.Years[2]).XAxis);
-            Headers = new ObservableCollection<string>(Dataset.GetAvgEconomicLoss().XAxis);
+            //Headers = new ObservableCollection<string>(Dataset.GetAvgEconomicLoss().XAxis);
+            Headers = new ObservableCollection<string>(Dataset.Header);
             //Headers = new ObservableCollection<string>(Dataset.GetTotalWasteInYear(Dataset.Years[2]).XAxis);
         }
         [RelayCommand]
