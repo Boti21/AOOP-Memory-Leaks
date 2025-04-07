@@ -40,6 +40,11 @@
                     </TabItem.Header>
                     <views:BarView DataContext="{Binding}"/>
                 </TabItem>
+                <TabItem Tag="Settings">
+                    <TabItem.Header>
+                        <Image Source="/Assets/settings.png" Width="50" Height="50"/>
+                    </TabItem.Header>
+                </TabItem>
             </TabControl>
                 <!-- <TextBlock Text="Hellooo??" FontSize="200"/> -->
                 <views:DesignView DataContext="{Binding SelectedGraph}" Grid.Column="1" Width="700"/>
