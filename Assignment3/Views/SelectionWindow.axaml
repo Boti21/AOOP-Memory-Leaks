@@ -15,32 +15,37 @@
     <Grid>
         <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,200">
             <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, *">
-        <TabControl Margin="5" Grid.Row="0" SelectedItem="{Binding SelectedTab, Mode=TwoWay}">
-            <TabItem Tag="Bar">
-                <TabItem.Header>
-                    <Image Source="/Assets/barchart.png" Width="50" Height="50"/>
-                </TabItem.Header>
-                <views:BarView DataContext="{Binding}"/>
-            </TabItem>
-            <TabItem Tag="Line">
-                <TabItem.Header>
-                    <Image Source="/Assets/linechart.jpg" Width="50" Height="50"/>
-                </TabItem.Header>
-                <views:BarView DataContext="{Binding}"/>
-            </TabItem>
-            <TabItem Tag="Scatter">
-                <TabItem.Header>
-                    <Image Source="/Assets/scatterchart.png" Width="50" Height="50"/>
-                </TabItem.Header>
-                <views:BarView DataContext="{Binding}"/>
-            </TabItem>
-            <TabItem Tag="Pie">
-                <TabItem.Header>
-                    <Image Source="/Assets/piechart.jpg" Width="50" Height="50"/>
-                </TabItem.Header>
-                <views:BarView DataContext="{Binding}"/>
-            </TabItem>
-        </TabControl>
+            <TabControl Margin="5" Grid.Row="0" SelectedItem="{Binding SelectedTab, Mode=TwoWay}">
+                <TabItem Tag="Bar">
+                    <TabItem.Header>
+                        <Image Source="/Assets/barchart.png" Width="50" Height="50"/>
+                    </TabItem.Header>
+                    <views:BarView DataContext="{Binding}"/>
+                </TabItem>
+                <TabItem Tag="Line">
+                    <TabItem.Header>
+                        <Image Source="/Assets/linechart.jpg" Width="50" Height="50"/>
+                    </TabItem.Header>
+                    <views:BarView DataContext="{Binding}"/>
+                </TabItem>
+                <TabItem Tag="Scatter">
+                    <TabItem.Header>
+                        <Image Source="/Assets/scatterchart.png" Width="50" Height="50"/>
+                    </TabItem.Header>
+                    <views:BarView DataContext="{Binding}"/>
+                </TabItem>
+                <TabItem Tag="Pie">
+                    <TabItem.Header>
+                        <Image Source="/Assets/piechart.jpg" Width="50" Height="50"/>
+                    </TabItem.Header>
+                    <views:BarView DataContext="{Binding}"/>
+                </TabItem>
+                <TabItem Tag="Settings">
+                    <TabItem.Header>
+                        <Image Source="/Assets/settings.png" Width="50" Height="50"/>
+                    </TabItem.Header>
+                </TabItem>
+            </TabControl>
                 <!-- <TextBlock Text="Hellooo??" FontSize="200"/> -->
                 <views:DesignView DataContext="{Binding SelectedGraph}" Grid.Column="1" Width="700"/>
                 <!-- <Button Content="Add Graph" Command="{Binding AddGraphCommand}" Grid.Row="1" Grid.Column="1" /> -->
@@ -64,6 +69,10 @@
             </Button>
         </Grid>
     </Grid>
+<<<<<<< HEAD
 
 
+=======
+    
+>>>>>>> f31686290c71bd04734d934a01ed9d8a293cc65d
 </UserControl>
