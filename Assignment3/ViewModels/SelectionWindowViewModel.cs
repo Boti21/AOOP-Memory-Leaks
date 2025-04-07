@@ -128,5 +128,11 @@ namespace Assignment3.ViewModels
                 mainWindowViewModel.MainWindowVisibility = true;
             }
         }
+        [RelayCommand]
+        private void SwitchToCanvas()
+        {
+            mainWindowViewModel.CurrentView = mainWindowViewModel.mainView;
+            mainWindowViewModel.MainWindowVisibility = true;
+        }
     }
 }
