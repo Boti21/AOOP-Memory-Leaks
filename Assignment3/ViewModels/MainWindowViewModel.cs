@@ -35,9 +35,16 @@ public partial class MainWindowViewModel : ViewModelBase
         SelectionWindow = new SelectionWindow { DataContext = SelectionWindowViewModel };
 
         // Testing
+        /*
         var dataset = new Dataset();
         dataset.GetRowOfCountryInCatInYear(dataset.Countries[0], dataset.Categories[0], dataset.Years[0]);
         dataset.GetCountryTrendInCat(dataset.Countries[0], dataset.Header[3]);
+        dataset.GetTotalWasteInYear(dataset.Years[0]);
+        dataset.GetSumOfTotalEconomicLossTrend();
+        dataset.GetPopulationTrendOfCountry(dataset.Countries[0]);
+        dataset.GetHouseHoldWasteInYear(dataset.Years[0]);
+        dataset.GetAvgEconomicLoss();
+        */
         // Until here
     }
 

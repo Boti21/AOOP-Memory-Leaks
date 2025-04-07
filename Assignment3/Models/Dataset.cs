@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -70,7 +71,7 @@ public class Dataset
     }
 
     // Bar chart
-    public IEnumerable<decimal> GetRowOfCountryInCatInYear(string Country, string Cat, string Year)
+    public IEnumerable<double> GetRowOfCountryInCatInYear(string Country, string Cat, string Year)
     {
         if (!Categories.Contains(Cat))
         {
@@ -89,14 +90,15 @@ public class Dataset
         return Records.Where(r => r.Country == Country && r.FoodCategory == Cat && r.Year == Convert.ToInt32(Year)).First().GetDecimalValuesAsCollection();
     }
 
-    public Datapoints GetCountryTrendInCat(string Country, string Cat)
+    public Datapoints<string, double> GetCountryTrendInCat(string Country, string Cat)
     {
-        var result = new Datapoints
+        var result = new Datapoints<string, double>()
         {
             XAxis = Records.Select(r => r.Year)
                 .Distinct()
                 .Order()
-                .Cast<object>()
+                .Select(y => Convert.ToString(y))
+                .ToList(),
         };
 
         int headerIndex = 0;
@@ -115,63 +117,155 @@ public class Dataset
             .ToList();
         
         // Don't know of a better way than this to parametrize the column based on the header
-        if (headerIndex == 0)
-        {
-            result.YAxis = countrySorted.Select(r => r.Country)
-                .Distinct()
-                .Cast<object>()
-                .ToList();
-        } 
-        else if (headerIndex == 1)
-        {
-            result.YAxis = countrySorted.Select(r => r.Year)
-                .Distinct()
-                .Cast<object>()
-                .ToList();
-        }
-        else if (headerIndex == 2)
-        {
-            result.YAxis = countrySorted.Select(r => r.FoodCategory)
-                .Distinct()
-                .Cast<object>()
-                .ToList();
-        }
-        else if (headerIndex == 3)
+        if (headerIndex == 3)
         {
             result.YAxis = countrySorted.Select(r => r.TotalWaste)
-                .Distinct()
-                .Cast<object>()
-                .ToList();
+                    .Distinct()
+                    .ToList();
         }
         else if (headerIndex == 4)
         {
             result.YAxis = countrySorted.Select(r => r.EconomicLoss)
-                .Distinct()
-                .Cast<object>()
-                .ToList();
+                    .Distinct()
+                    .ToList();
         }
         else if (headerIndex == 5)
         {
             result.YAxis = countrySorted.Select(r => r.AvgWastePerCapita)
                 .Distinct()
-                .Cast<object>()
                 .ToList();
         }
         else if (headerIndex == 6)
         {
             result.YAxis = countrySorted.Select(r => r.Population)
                 .Distinct()
-                .Cast<object>()
                 .ToList();
         }
         else if (headerIndex == 7)
         {
             result.YAxis = countrySorted.Select(r => r.HouseholdWaste)
                 .Distinct()
-                .Cast<object>()
+                .ToList();
+        }
+        else
+        {
+            result.YAxis = countrySorted.Select(r => r.TotalWaste)
+                .Distinct()
                 .ToList();
         }
         
+        return result;
+    }
+
+    
+    public Datapoints<string, double> GetTotalWasteInYear(string Year)
+    {
+        var result = new Datapoints<string, double>()
+        {
+            XAxis = Countries.Select(r => r)
+                .Order()
+                .ToList(),
+            YAxis = Records.Where(r => r.Year == Convert.ToInt32(Year))
+                .DistinctBy(r => r.Country)
+                .OrderBy(r => r.Country)
+                .Select(r => (double)r.TotalWaste)
+                .ToList(),
+        };
+        return result;
+    }
+
+    /*
+    public Datapoints<string, double> GetSumOfTotalEconomicLossTrend()
+    {
+        var orderedYears = Years.Order().ToList();
+        List<decimal> sum = new List<decimal>();
+        var result = new Datapoints<string, double>()
+        {
+            XAxis = Years.Select(r => r)
+                .Order()
+                .ToList(),
+        };
+
+        for (int i = 0; i < Years.Length; i++)
+        {
+            sum.Add(Records.Select(r => r)
+                .DistinctBy(r => r.Country)
+                .OrderBy(r => r.Year)
+                .Where(r => r.Year == Convert.ToInt32(orderedYears[i]))
+                .Sum(r => r.EconomicLoss)
+            );
+        }
+
+        // broken
+        var temp = Records
+                
+            .GroupBy(r => r.Country)
+            .ToList();
+
+        result.YAxis = Records
+            .DistinctBy(r => r.Country)
+            .OrderBy(r => r.Year)
+            .GroupBy(r => r.Year)
+            .Select(r => r.Sum(r => r.EconomicLoss))
+            .Cast<object>();
+        
+        return result;
+    }
+    */
+
+    public Datapoints<string, double> GetPopulationTrendOfCountry(string Country)
+    {
+        var result = new Datapoints<string, double>()
+        {
+            XAxis = Records.Select(r => r.Year)
+                .Distinct()
+                .OrderBy(r => r)
+                .Select(y => Convert.ToString(y))
+                .ToList(),
+            YAxis = Records.Where(r => r.Country == Country)
+                .DistinctBy(r => r.Year)
+                .OrderBy(r => r.Year)
+                .Select(r => r.Population)
+                .ToList()
+        };
+        
+        return result;
+    }
+
+    public Datapoints<string, double> GetHouseHoldWasteInYear(string Year)
+    {
+        var result = new Datapoints<string, double>()
+        {
+            XAxis = Records.Select(r => r.Country)
+                .Distinct()
+                .Order()
+                .ToList(),
+            YAxis = Records.Where(r => r.Year == Convert.ToInt32(Year))
+                            .DistinctBy(r => r.Country)
+                            .OrderBy(r => r.Country)
+                            .Select(r => r.HouseholdWaste)
+                            .ToList()
+        };
+        return result;
+    }
+
+    public Datapoints<string, double> GetAvgEconomicLoss()
+    {
+        var result = new Datapoints<string, double>()
+        {
+            XAxis = Records
+                .Select(r => r.Year)
+                .Distinct()
+                .Order()
+                .Select(y => Convert.ToString(y))
+            .ToList(),
+            YAxis = Records
+                        .DistinctBy(r => r.Country)
+                        .OrderBy(r => r.Year)
+                        .GroupBy(r => r.Year)
+                        .Select(g => g.Average(r => r.EconomicLoss))
+                        .ToList()
+        };
         return result;
     }
     

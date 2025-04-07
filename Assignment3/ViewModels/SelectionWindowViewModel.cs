@@ -8,6 +8,8 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using Assignment3.Models;
 
 namespace Assignment3.ViewModels
 {
@@ -16,6 +18,9 @@ namespace Assignment3.ViewModels
         private MainWindowViewModel mainWindowViewModel;
         public bool CartesianVisible = true;
         public bool PieVisible = false;
+        
+        public Dataset Dataset;
+        
         private TabItem selectedTab;
         public TabItem SelectedTab
         {
@@ -50,6 +55,8 @@ namespace Assignment3.ViewModels
         private GraphViewModel? selectedGraph;
         public SelectionWindowViewModel(MainWindowViewModel mainWindowViewModel)
         {
+            Dataset = new Dataset();
+            
             this.mainWindowViewModel = mainWindowViewModel;
             AddHeaders();
             CreateGraph();
@@ -74,10 +81,13 @@ namespace Assignment3.ViewModels
                 "Scatter" => new ScatterGraphViewModel()
             };
 
-            SelectedGraph.Series[0].Values = new ObservableCollection<double> { 1, 2, 3 };
+            //SelectedGraph.Series[0].Values = new ObservableCollection<double> { 1, 2, 3 };
+            //SelectedGraph.Series[0].Values = new ObservableCollection<double>(Dataset.GetTotalWasteInYear(Dataset.Years[2]).YAxis);
+            SelectedGraph.Series[0].Values = new ObservableCollection<double>(Dataset.GetAvgEconomicLoss().YAxis);
             SelectedGraph.Series[0].Name = "NewTest";
             SelectedGraph.Title.Text = $"{GraphType} Chart";
             SelectedGraph.XAxes[0].Name = "X-Axis";
+            selectedGraph.XAxes[0].Labels = Headers;
             SelectedGraph.YAxes[0].Name = "Y-Axis";
             
             SelectedGraph.PieSeries.Clear();
@@ -112,11 +122,16 @@ namespace Assignment3.ViewModels
         }
         private void AddHeaders()
         {
+            /*
             Headers = new ObservableCollection<string>
             {
                 "Country", "Year", "Food Category", "Total Waste (Tons)", "Economic Loss (Million $)",
                 "Avg Waste per Capita (Kg)", "Population (Million)", "Household Waste (%)"
             };
+            */
+            //Headers = new ObservableCollection<string>(Dataset.GetTotalWasteInYear(Dataset.Years[2]).XAxis);
+            Headers = new ObservableCollection<string>(Dataset.GetAvgEconomicLoss().XAxis);
+            //Headers = new ObservableCollection<string>(Dataset.GetTotalWasteInYear(Dataset.Years[2]).XAxis);
         }
         [RelayCommand]
         private void AddGraph()
