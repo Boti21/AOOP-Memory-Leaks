@@ -19,14 +19,24 @@
         <ItemsControl ItemsSource="{Binding Graphs}" Canvas.Top="50" Canvas.Right="50" IsVisible="{Binding MainWindowVisibility}" >
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <lvc:CartesianChart 
-                        Series="{Binding Series}"
-                        Title="{Binding Title}"
-                        XAxes="{Binding XAxes}"
-                        YAxes="{Binding YAxes}"
-                        Height="300"
-                        Width="300">
-                    </lvc:CartesianChart>
+                    <StackPanel>
+                        <lvc:CartesianChart 
+                            IsVisible="{Binding IsCart}"
+                            Series="{Binding Series}"
+                            Title="{Binding Title}"
+                            XAxes="{Binding XAxes}"
+                            YAxes="{Binding YAxes}"
+                            Height="300"
+                            Width="300">
+                        </lvc:CartesianChart>
+                        
+                        <lvc:PieChart
+                            IsVisible="{Binding IsPie}"
+                            Series="{Binding PieSeries}"
+                            Height="300"
+                            Width="300">
+                        </lvc:PieChart>
+                    </StackPanel>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl> 
