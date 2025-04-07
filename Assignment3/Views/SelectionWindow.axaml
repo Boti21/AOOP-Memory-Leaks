@@ -11,20 +11,73 @@
     <Design.DataContext>
         <vm:SelectionWindowViewModel/>
     </Design.DataContext>
+  
+    <Grid>
+        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,200">
+            <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, *">
+                <TabControl Margin="5" Grid.Row="0" SelectedItem="{Binding SelectedTab, Mode=TwoWay}">
+                    <TabItem Header="Bar">
+                        <views:BarView DataContext="{Binding}"/>
+                    </TabItem>
+                    <TabItem Header="Line">
+                        <views:LineView DataContext="{Binding}"/>
+                    </TabItem>
+                    <TabItem Header="Scatter">
+                        <views:ScatterView DataContext="{Binding}"/>
+                    </TabItem>
+                    <TabItem Header="Pie">
+                        <views:PieView DataContext="{Binding}"/>
+                    </TabItem>
+                </TabControl>
+                <!-- <TextBlock Text="Hellooo??" FontSize="200"/> -->
+                <views:DesignView DataContext="{Binding SelectedGraph}" Grid.Column="1" Width="700"/>
+                <!-- <Button Content="Add Graph" Command="{Binding AddGraphCommand}" Grid.Row="1" Grid.Column="1" /> -->
+            </Grid> 
+            <Button Content="ADD" Command="{Binding AddGraphCommand}" HorizontalAlignment="Right"/>
+        </StackPanel>
+        <Grid VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="50">
+            <Button 
+                Width="120"
+                Height="70"
+                Command="{Binding SwitchToCanvasCommand}" 
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Bottom"
+                Margin="0,0,10,10">
+                <TextBlock 
+                    Text="CANVAS" 
+                    FontWeight="Bold" 
+                    FontSize="18" 
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"/>
+            </Button>
+        </Grid>
+    </Grid>
     
     <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, *">
         <TabControl Margin="5" Grid.Row="0" SelectedItem="{Binding SelectedTab, Mode=TwoWay}">
-            <TabItem Header="Bar">
+            <TabItem Tag="Bar">
+                <TabItem.Header>
+                    <Image Source="/Assets/barchart.png" Width="50" Height="50"/>
+                </TabItem.Header>
                 <views:BarView DataContext="{Binding}"/>
             </TabItem>
-            <TabItem Header="Line">
-                <views:LineView DataContext="{Binding}"/>
+            <TabItem Tag="Line">
+                <TabItem.Header>
+                    <Image Source="/Assets/linechart.jpg" Width="50" Height="50"/>
+                </TabItem.Header>
+                <views:BarView DataContext="{Binding}"/>
             </TabItem>
-            <TabItem Header="Scatter">
-                <views:ScatterView DataContext="{Binding}"/>
+            <TabItem Tag="Scatter">
+                <TabItem.Header>
+                    <Image Source="/Assets/scatterchart.png" Width="50" Height="50"/>
+                </TabItem.Header>
+                <views:BarView DataContext="{Binding}"/>
             </TabItem>
-            <TabItem Header="Pie">
-                <views:PieView DataContext="{Binding}"/>
+            <TabItem Tag="Pie">
+                <TabItem.Header>
+                    <Image Source="/Assets/piechart.jpg" Width="50" Height="50"/>
+                </TabItem.Header>
+                <views:BarView DataContext="{Binding}"/>
             </TabItem>
         </TabControl>
         <!-- <TextBlock Text="Hellooo??" FontSize="200"/> -->

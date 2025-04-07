@@ -31,7 +31,10 @@ namespace Assignment3.ViewModels
                 {
                     selectedTab = value;
                     OnPropertyChanged(nameof(SelectedTab));
-                    GraphType = selectedTab.Header.ToString();
+                    if (selectedTab is TabItem tabItem && tabItem.Tag is string tag)
+                    {
+                        GraphType = tag;
+                    }
                 }
             }
         }
@@ -142,6 +145,12 @@ namespace Assignment3.ViewModels
                 mainWindowViewModel.CurrentView = mainWindowViewModel.mainView;
                 mainWindowViewModel.MainWindowVisibility = true;
             }
+        }
+        [RelayCommand]
+        private void SwitchToCanvas()
+        {
+            mainWindowViewModel.CurrentView = mainWindowViewModel.mainView;
+            mainWindowViewModel.MainWindowVisibility = true;
         }
     }
 }
